@@ -1,6 +1,5 @@
 <?php
 /**
- * @version		$Id: fjarticle.php 136 2011-05-21 17:44:48Z dextercowley $
  * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
@@ -51,7 +50,7 @@ class JFormFieldFJArticle extends JFormField
 
 		// Setup variables for display.
 		$html	= array();
-		$link	= 'index.php?option=com_content&amp;view=articles&amp;layout=modal&amp;tmpl=component&amp;function=jSelectArticle_' . $this->id;
+		$link	= 'index.php?option=com_content&amp;view=articles&amp;layout=modal&amp;tmpl=component&amp;function=jSelectArticle_'.$this->id;
 
 		$db	= JFactory::getDBO();
 		$db->setQuery(
@@ -85,7 +84,7 @@ class JFormFieldFJArticle extends JFormField
 		$html[] = '</div>';
 
 		// The article clear button.
-		$html[] = "<div class=\"button2-left\"><div class=\"blank\"><a title=\"".JText::_('COM_FJ_RELATED_NO_ARTICLE_DESC')."\" href=\"#\" onclick=\"jSelectArticle_jform_request_id('', '".$noArticle."', '');\">"
+		$html[] = "<div class=\"button2-left\"><div class=\"blank\"><a title=\"".JText::_('COM_FJ_RELATED_NO_ARTICLE_DESC')."\" href=\"#\" onclick=\"jSelectArticle_jform_params_id('', '".$noArticle."', '');\">"
 			. JText::_( 'COM_FJ_RELATED_RESET' ) ." </a></div></div>";
 
 		// The active article id field.
