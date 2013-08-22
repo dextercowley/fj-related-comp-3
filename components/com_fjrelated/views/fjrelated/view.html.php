@@ -1,6 +1,5 @@
 <?php
 /**
- * @version		$Id: view.html.php 138 2011-05-21 18:00:25Z dextercowley $
  * @package		com_fj_related
  * @copyright	Copyright (C) 2008-2011 Mark Dexter. Portions Copyright Open Source Matters. All rights reserved.
  * @license		http://www.gnu.org/licenses/gpl.html
@@ -20,7 +19,7 @@ jimport( 'joomla.html.parameter');
  * @package    FJ_Related
  */
 
-class FJRelatedViewFJRelated extends JViewLegacy
+class FJRelatedViewFJRelated extends JView
 {
 	protected $state = null;
 	protected $item = null;
@@ -37,7 +36,7 @@ class FJRelatedViewFJRelated extends JViewLegacy
 		parent::__construct($config);
 
 		//Add the helper path to the JHTML library
-		JHTML::addIncludePath(JPATH_COMPONENT . '/helpers');
+		JHTML::addIncludePath(JPATH_COMPONENT.DS.'helpers');
 	}
 
 	function display($tpl = null)
@@ -99,11 +98,11 @@ class FJRelatedViewFJRelated extends JViewLegacy
 		}
 		$document->setTitle( $params->get( 'page_title' ) );
 
-		if ($article->metadesc) {
-			$document->setDescription( $article->metadesc );
-		}
-		if ($article->metakey) {
-			$document->setMetadata('keywords', $article->metakey);
+		if ($params->get('menu-meta_description')) {
+            $document->setDescription($params->get('menu-meta_description'));
+        }
+		if ($params->get('menu-meta_keywords')) {
+			$document->setMetadata('keywords', $params->get('menu-meta_keywords'));
 		}
 
 		// Get some data from the model
@@ -125,9 +124,9 @@ class FJRelatedViewFJRelated extends JViewLegacy
 
 		// Create a user access object for the user
 		$access					= new stdClass();
-		$access->canEdit		= $user->authorise('core.edit', 'com_content');
-		$access->canEditOwn		= $user->authorise('core.edit.own', 'com_content');
-		$access->canPublish		= $user->authorise('core.edit.state', 'com_content');
+		$access->canEdit		= $user->authorize('core.edit', 'com_content');
+		$access->canEditOwn		= $user->authorize('core.edit.own', 'com_content');
+		$access->canPublish		= $user->authorize('core.edit.state', 'com_content');
 
 		jimport('joomla.html.pagination');
 		//In case we are in a blog view set the limit

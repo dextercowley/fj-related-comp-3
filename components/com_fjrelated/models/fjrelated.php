@@ -1,6 +1,5 @@
 <?php
 /**
- * @version		$Id: fjrelated.php 138 2011-05-21 18:00:25Z dextercowley $
  * @package		com_fjrelated_plus
  * @copyright	Copyright (C) 2008 Mark Dexter. Portions Copyright Open Source Matters. All rights reserved.
  * @license		http://www.gnu.org/licenses/gpl.html
@@ -12,8 +11,8 @@ defined('_JEXEC') or die( 'Restricted access' );
 
 jimport('joomla.application.component.modellist');
 jimport('joomla.html.parameter');
-require_once (JPATH_SITE . '/components/com_content/helpers/route.php');
-require_once (JPATH_SITE . '/components/com_content/helpers/query.php');
+require_once (JPATH_SITE.DS.'components'.DS.'com_content'.DS.'helpers'.DS.'route.php');
+require_once (JPATH_SITE.DS.'components'.DS.'com_content'.DS.'helpers'.DS.'query.php');
 
 
 /**
@@ -95,7 +94,7 @@ class FJRelatedModelFJRelated extends JModelList
 		$params = $app->getParams();
 
 		$id = $params->get('id', '0');
-		$this->setId((int) $id);
+		$this->setId((int)$id);
 		$this->_loadArticle();
 
 		// here we initialize defaults for related items model
@@ -171,7 +170,7 @@ class FJRelatedModelFJRelated extends JModelList
 			$article->cat_access	= null;
 			$article->author		= null;
 			$article->created_by	= $user->get('id');
-			$article->parameters	= new JRegistry( '' );
+			$article->parameters	= new JRegistry();
 			$article->text			= '';
 			$app = JFactory::getApplication();
 			$params = $app->getParams();
@@ -237,7 +236,7 @@ class FJRelatedModelFJRelated extends JModelList
 			// Get the WHERE clause
 			$where	= $this->_buildContentWhere();
 
-			$query = 'SELECT a.*, u.name AS author, cc.title AS category, ' .
+			$query = 'SELECT a.*, u.name AS author, u.usertype, cc.title AS category, ' .
 					' CASE WHEN CHAR_LENGTH(a.alias) THEN CONCAT_WS(":", a.id, a.alias) ELSE a.id END as slug,'.
 					' CASE WHEN CHAR_LENGTH(cc.alias) THEN CONCAT_WS(":", cc.id, cc.alias) ELSE cc.id END as catslug,'.
 					' cc.published AS cat_pub, ' .
@@ -318,7 +317,7 @@ class FJRelatedModelFJRelated extends JModelList
 		$id 		= JRequest::getVar('id', 0, '', 'int');
 
 		$jnow		= JFactory::getDate();
-		$now		= $jnow->toSql();
+		$now		= $jnow->toMySQL();
 		$nullDate	= $this->_db->getNullDate();
 
 		/*
@@ -327,7 +326,7 @@ class FJRelatedModelFJRelated extends JModelList
 		 */
 		$where = ' WHERE a.id = '. (int) $this->_id;
 
-		if (!$user->authorise('com_content', 'edit', 'content', 'all'))
+		if (!$user->authorize('com_content', 'edit', 'content', 'all'))
 		{
 			$where .= ' AND ( ';
 			$where .= ' ( a.created_by = ' . (int) $user->id . ' ) ';
@@ -371,7 +370,7 @@ class FJRelatedModelFJRelated extends JModelList
 			$db	=$this->getDBO();
 			$user	= JFactory::getUser();
 			$date = JFactory::getDate();
-			$now  = $date->toSql();
+			$now  = $date->toMySQL();
 			$nullDate = $db->getNullDate();
 
 			// explode the meta keys on a comma

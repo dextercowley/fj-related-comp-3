@@ -1,6 +1,5 @@
-<?php 
+<?php
 /**
- * @version		$Id: default.php 117 2011-05-16 19:33:55Z dextercowley $
  * @package		Site
  * @subpackage	com_fjrelated
  * @copyright	Copyright (C) 2009 - 2010 Mark Dexter. Portions Copyright(C) Open Source Matters, Inc. All rights reserved.

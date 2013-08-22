@@ -1,6 +1,5 @@
-<?php 
+<?php
 /**
- * @version		$Id: blog_links.php 91 2011-03-23 17:37:16Z dextercowley $
  * @package		Site
  * @subpackage	com_fjrelated
  * @copyright	Copyright (C) 2009 - 2010 Mark Dexter. Portions Copyright(C) Open Source Matters, Inc. All rights reserved.

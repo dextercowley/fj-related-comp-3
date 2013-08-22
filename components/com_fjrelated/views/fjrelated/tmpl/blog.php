@@ -1,6 +1,5 @@
 <?php
 /**
- * @version		$Id: blog.php 91 2011-03-23 17:37:16Z dextercowley $
  * @package		com_fj_related
  * @copyright	Copyright (C) 2008-2011 Mark Dexter. Portions Copyright Open Source Matters. All rights reserved.
  * @license		http://www.gnu.org/licenses/gpl.html
@@ -8,7 +7,7 @@
 
 // no direct access
 defined('_JEXEC') or die('Restricted access');
-JHtml::addIncludePath(JPATH_COMPONENT . '/helpers');
+JHtml::addIncludePath(JPATH_COMPONENT.DS.'helpers');
 
 // If the page class is defined, add to class as suffix.
 // It will be a separate class if the user starts it with a space

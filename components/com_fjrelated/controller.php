@@ -1,6 +1,5 @@
 <?php
 /**
- * @version		$Id: controller.php 120 2011-05-18 14:34:59Z dextercowley $
  * @package		com_fjrelated_plus
  * @copyright	Copyright (C) 2008 Mark Dexter. Portions Copyright Open Source Matters. All rights reserved.
  * @license		http://www.gnu.org/licenses/gpl.html
@@ -18,7 +17,7 @@ jimport('joomla.application.component.controller');
  *
  * @access  public
  */
-class FJRelatedController extends JControllerLegacy
+class FJRelatedController extends JController
 {
 	/**
 	 * Method to display the view

@@ -1,6 +1,5 @@
 <?php
 /**
- * @version		$Id: fjicon.php 99 2011-05-03 22:49:23Z dextercowley $
  * @copyright	Copyright (C) 2005 - 2008 Open Source Matters. All rights reserved.
  * @license		GNU/GPL, see LICENSE.php
  * Joomla! is free software. This version may have been modified pursuant to the
@@ -30,12 +29,12 @@ class JHTMLFJIcon
 		return str_replace('com_fjrelated','com_content',$return);
 	}
 
-	function email($article, $params)
+	static function email($article, $params)
 	{
 		return JHTMLIcon::email($article, $params, $attribs = array());
 	}
 
-	function edit($article, $params, $attribs = array())
+	static function edit($article, $params, $attribs = array())
 	{
 		// Initialise variables.
 		$user	= JFactory::getUser();
@@ -90,13 +89,13 @@ class JHTMLFJIcon
 	}
 
 
-	function print_popup($article, $params, $attribs = array())
+	static function print_popup($article, $params, $attribs = array())
 	{
 		$return = JHTMLIcon::print_popup($article, $params, $attribs = array());
 		return str_replace('com_fjrelated', 'com_content', $return);
 	}
 
-	function print_screen($article, $params, $access, $attribs = array())
+	static function print_screen($article, $params, $access, $attribs = array())
 	{
 		return JHTMLIcon::print_screen($article, $params, $attribs = array());
 	}

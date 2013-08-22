@@ -1,6 +1,5 @@
 <?php
 /**
- * @version		$Id: view.feed.php 20 2009-11-14 03:25:55Z dextercowley $
  * @package		com_fjrelated_plus
  * @copyright	Copyright (C) 2008 Mark Dexter. Portions Copyright Open Source Matters. All rights reserved.
  * @license		http://www.gnu.org/licenses/gpl.html
@@ -17,7 +16,7 @@ jimport( 'joomla.application.component.view');
  * @package    FJRelated
  */
 
-class FJRelatedViewFJRelated extends JViewLegacy
+class FJRelatedViewFJRelated extends JView
 {
 	function display()
 	{
