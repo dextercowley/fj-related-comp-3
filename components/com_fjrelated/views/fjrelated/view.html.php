@@ -19,7 +19,7 @@ jimport( 'joomla.html.parameter');
  * @package    FJ_Related
  */
 
-class FJRelatedViewFJRelated extends JView
+class FJRelatedViewFJRelated extends JViewLegacy
 {
 	protected $state = null;
 	protected $item = null;
@@ -36,7 +36,7 @@ class FJRelatedViewFJRelated extends JView
 		parent::__construct($config);
 
 		//Add the helper path to the JHTML library
-		JHTML::addIncludePath(JPATH_COMPONENT.DS.'helpers');
+		JHTML::addIncludePath(JPATH_COMPONENT . '/helpers');
 	}
 
 	function display($tpl = null)
@@ -124,9 +124,9 @@ class FJRelatedViewFJRelated extends JView
 
 		// Create a user access object for the user
 		$access					= new stdClass();
-		$access->canEdit		= $user->authorize('core.edit', 'com_content');
-		$access->canEditOwn		= $user->authorize('core.edit.own', 'com_content');
-		$access->canPublish		= $user->authorize('core.edit.state', 'com_content');
+		$access->canEdit		= $user->authorise('core.edit', 'com_content');
+		$access->canEditOwn		= $user->authorise('core.edit.own', 'com_content');
+		$access->canPublish		= $user->authorise('core.edit.state', 'com_content');
 
 		jimport('joomla.html.pagination');
 		//In case we are in a blog view set the limit

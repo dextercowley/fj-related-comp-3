@@ -11,8 +11,8 @@ defined('_JEXEC') or die( 'Restricted access' );
 
 jimport('joomla.application.component.modellist');
 jimport('joomla.html.parameter');
-require_once (JPATH_SITE.DS.'components'.DS.'com_content'.DS.'helpers'.DS.'route.php');
-require_once (JPATH_SITE.DS.'components'.DS.'com_content'.DS.'helpers'.DS.'query.php');
+require_once (JPATH_SITE . '/components/com_content/helpers/route.php');
+require_once (JPATH_SITE . '/components/com_content/helpers/query.php');
 
 
 /**
@@ -236,7 +236,7 @@ class FJRelatedModelFJRelated extends JModelList
 			// Get the WHERE clause
 			$where	= $this->_buildContentWhere();
 
-			$query = 'SELECT a.*, u.name AS author, u.usertype, cc.title AS category, ' .
+			$query = 'SELECT a.*, u.name AS author, cc.title AS category, ' .
 					' CASE WHEN CHAR_LENGTH(a.alias) THEN CONCAT_WS(":", a.id, a.alias) ELSE a.id END as slug,'.
 					' CASE WHEN CHAR_LENGTH(cc.alias) THEN CONCAT_WS(":", cc.id, cc.alias) ELSE cc.id END as catslug,'.
 					' cc.published AS cat_pub, ' .
@@ -317,7 +317,7 @@ class FJRelatedModelFJRelated extends JModelList
 		$id 		= JRequest::getVar('id', 0, '', 'int');
 
 		$jnow		= JFactory::getDate();
-		$now		= $jnow->toMySQL();
+		$now		= $jnow->toSql();
 		$nullDate	= $this->_db->getNullDate();
 
 		/*
@@ -326,7 +326,7 @@ class FJRelatedModelFJRelated extends JModelList
 		 */
 		$where = ' WHERE a.id = '. (int) $this->_id;
 
-		if (!$user->authorize('com_content', 'edit', 'content', 'all'))
+		if (!$user->authorise('com_content', 'edit', 'content', 'all'))
 		{
 			$where .= ' AND ( ';
 			$where .= ' ( a.created_by = ' . (int) $user->id . ' ) ';
@@ -370,7 +370,7 @@ class FJRelatedModelFJRelated extends JModelList
 			$db	=$this->getDBO();
 			$user	= JFactory::getUser();
 			$date = JFactory::getDate();
-			$now  = $date->toMySQL();
+			$now  = $date->toSql();
 			$nullDate = $db->getNullDate();
 
 			// explode the meta keys on a comma

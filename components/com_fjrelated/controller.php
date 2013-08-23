@@ -17,7 +17,7 @@ jimport('joomla.application.component.controller');
  *
  * @access  public
  */
-class FJRelatedController extends JController
+class FJRelatedController extends JControllerLegacy
 {
 	/**
 	 * Method to display the view

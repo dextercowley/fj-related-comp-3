@@ -15,7 +15,7 @@ defined( '_JEXEC' ) or die( 'Restricted access' );
 jimport('joomla.application.component.controller');
 
 // Create the controller
-$controller = JController::getInstance('FJRelated');
+$controller = JControllerLegacy::getInstance('FJRelated');
 $controller->execute(JRequest::getCmd('task'));
 $controller->redirect();
 

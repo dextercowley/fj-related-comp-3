@@ -16,7 +16,7 @@ jimport( 'joomla.application.component.view');
  * @package    FJRelated
  */
 
-class FJRelatedViewFJRelated extends JView
+class FJRelatedViewFJRelated extends JViewLegacy
 {
 	function display()
 	{
