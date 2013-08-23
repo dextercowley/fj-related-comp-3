@@ -10,49 +10,18 @@
 defined('_JEXEC') or die('Restricted access');
 // Create a shortcut for params.
 $params = &$this->item->params;
-$canEdit	= $this->item->access_edit;
+$params->set('access-edit', $this->item->access_edit);
 $showCount = $params->get('showMatchCount', 0);
 $showMatchList = $params->get('showMatchList', 0);?>
 
 <?php if ($this->item->state == 0) : ?>
-<div class="system-unpublished">
-<?php endif; ?>
-<?php if ($params->get('show_title')) : ?>
-	<h2>
-		<?php if ($params->get('link_titles') && $this->item->access_allowed) : ?>
-			<?php // If fjrelated_link, use it for the article link ?>
-			<?php if ($this->item->fjrelated_link) : ?>
-				<a href="<?php echo JRoute::_($this->item->fjrelated_link); ?>">
-			<?php else : ?>
-				<a href="<?php echo JRoute::_(ContentHelperRoute::getArticleRoute($this->item->slug, $this->item->catid)); ?>">
-			<?php endif; ?>
-			<?php echo $this->escape($this->item->title); ?></a>
-		<?php else : ?>
-			<?php echo $this->escape($this->item->title); ?>
-		<?php endif; ?>
-	</h2>
+	<span class="label label-warning"><?php echo JText::_('JUNPUBLISHED'); ?></span>
 <?php endif; ?>
 
-<?php if ($params->get('show_print_icon') || $params->get('show_email_icon') || $canEdit) : ?>
-	<ul class="actions">
-		<?php if ($params->get('show_print_icon')) : ?>
-		<li class="print-icon">
-			<?php echo JHtml::_('fjicon.print_popup', $this->item, $params); ?>
-		</li>
-		<?php endif; ?>
-		<?php if ($params->get('show_email_icon')) : ?>
-		<li class="email-icon">
-			<?php echo JHtml::_('fjicon.email', $this->item, $params); ?>
-		</li>
-		<?php endif; ?>
+<?php echo JLayoutHelper::render('joomla.content.blog_style_default_item_title', $this->item); ?>
 
-		<?php if ($canEdit) : ?>
-		<li class="edit-icon">
-			<?php echo JHtml::_('fjicon.edit', $this->item, $params); ?>
-		</li>
-		<?php endif; ?>
-	</ul>
-<?php endif; ?>
+<?php echo JLayoutHelper::render('joomla.content.icons', array('params' => $params, 'item' => $this->item, 'print' => false)); ?>
+
 
 <?php if (!$params->get('show_intro')) : ?>
 	<?php echo $this->item->event->afterDisplayTitle; ?>
