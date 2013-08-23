@@ -314,7 +314,7 @@ class FJRelatedModelFJRelated extends JModelList
 
 		$user		= JFactory::getUser();
 		$aid		= (int) $user->get('aid', 0);
-		$id 		= $app->getUInt('id', 0);
+		$id 		= $app->input->getUInt('id', 0);
 
 		$jnow		= JFactory::getDate();
 		$now		= $jnow->toSql();
