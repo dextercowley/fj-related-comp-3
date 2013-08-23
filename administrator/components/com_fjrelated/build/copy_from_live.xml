@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="fj-related-comp-3" default="copy_all" basedir=".">
+	<property name="temp" value="tmp" />
+	<property name="live" value="../../../.." />
+	<target name="copy_all" description="Copies files from live project folders.">
+		<echo message="Copying FJ Related Layout files from live to tmp folder..." />
+		<delete dir="tmp" includeemptydirs="true" verbose="true" failonerror="true" />
+		<mkdir dir="tmp" />
+		<mkdir dir="tmp/site" />
+		<mkdir dir="tmp/site/helpers" />
+		<mkdir dir="tmp/site/language" />
+		<mkdir dir="tmp/site/language/en-GB" />
+		<mkdir dir="tmp/site/models" />
+		<mkdir dir="tmp/site/views" />
+		<mkdir dir="tmp/site/views/fjrelated" />
+		<mkdir dir="tmp/site/views/fjrelated/tmpl" />
+
+		<copy file="${live}/administrator/components/com_fjrelated/fields/fjarticle.php"
+					todir="${temp}/admin/fields/" />
+		<copy file="${live}/administrator/components/com_fjrelated/fields/index.html"
+							todir="${temp}/admin/fields/" />
+		<copy file="${live}/administrator/components/com_fjrelated/language/en-GB/en-GB.com_fjrelated.ini"
+					todir="${temp}/admin/language/en-GB/" />
+		<copy file="${live}/administrator/components/com_fjrelated/language/en-GB/en-GB.com_fjrelated.sys.ini"
+					todir="${temp}/admin/language/en-GB/" />					
+		<copy file="${live}/administrator/components/com_fjrelated/language/en-GB/index.html"
+					todir="${temp}/admin/language/en-GB/" />					
+		<copy file="${live}/administrator/components/com_fjrelated/language/index.html"
+					todir="${temp}/admin/language/" />					
+		<copy file="${live}/administrator/components/com_fjrelated/fjrelated.php"
+			todir="${temp}/admin/" />
+		<copy file="${live}/administrator/components/com_fjrelated/fjrelated.xml"
+			todir="${temp}" />
+		<copy file="${live}/administrator/components/com_fjrelated/index.html"
+			todir="${temp}/admin/" />
+
+		<copy todir="${temp}/site" overwrite="true">
+			<fileset dir="${live}/components/com_fjrelated">
+				<include name="helpers/*.*" />
+				<include name="models/*.*" />
+				<include name="language/*.*" />
+				<include name="language/en-GB/*.*" />
+				<include name="views/fjrelated/tmpl/*.*" />
+				<include name="views/fjrelated/*.*" />
+				<include name="views/*.*" />
+				<include name="*.*" />
+			</fileset>
+		</copy>
+
+	</target>
+</project>
