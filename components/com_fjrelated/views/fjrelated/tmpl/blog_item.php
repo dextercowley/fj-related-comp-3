@@ -145,66 +145,6 @@ $info = $this->item->params->get('info_block_position', 0);?>
 
 <?php echo $this->item->event->beforeDisplayContent; ?>
 
-<?php if (($params->get('show_author')) or ($params->get('show_category')) or ($params->get('show_create_date')) or ($params->get('show_modify_date')) or ($params->get('show_publish_date')) or ($params->get('show_parent_category')) or ($params->get('show_hits'))) : ?>
- <dl class="article-info">
- <dt class="article-info-term"><?php  echo JText::_('COM_FJRELATED_ARTICLE_INFO'); ?></dt>
-<?php endif; ?>
-<?php if ($params->get('show_parent_category')) : ?>
-		<dd class="parent-category-name">
-			<?php $title = $this->escape($this->item->parent_title);
-				$url = '<a href="' . JRoute::_(ContentHelperRoute::getCategoryRoute($this->item->parent_slug)) . '">' . $title . '</a>'; ?>
-			<?php if ($params->get('link_parent_category') AND $this->item->parent_slug) : ?>
-				<?php echo JText::sprintf('COM_FJRELATED_PARENT', $url); ?>
-				<?php else : ?>
-				<?php echo JText::sprintf('COM_FJRELATED_PARENT', $title); ?>
-			<?php endif; ?>
-		</dd>
-<?php endif; ?>
-<?php if ($params->get('show_category')) : ?>
-		<dd class="category-name">
-			<?php $title = $this->escape($this->item->category);
-				$url = '<a href="'.JRoute::_(ContentHelperRoute::getCategoryRoute($this->item->catslug)).'">'.$title.'</a>';?>
-			<?php if ($params->get('link_category') AND $this->item->catslug) : ?>
-				<?php echo JText::sprintf('COM_FJRELATED_CATEGORY', $url); ?>
-				<?php else : ?>
-				<?php echo JText::sprintf('COM_FJRELATED_CATEGORY', $title); ?>
-			<?php endif; ?>
-		</dd>
-<?php endif; ?>
-<?php if ($params->get('show_create_date')) : ?>
-		<dd class="create">
-		<?php echo JText::sprintf('COM_FJRELATED_CREATED_DATE_ON', JHTML::_('date',$this->item->created, JText::_('DATE_FORMAT_LC2'))); ?>
-		</dd>
-<?php endif; ?>
-<?php if ($params->get('show_modify_date')) : ?>
-		<dd class="modified">
-		<?php echo JText::sprintf('COM_FJRELATED_LAST_UPDATED', JHTML::_('date',$this->item->modified, JText::_('DATE_FORMAT_LC2'))); ?>
-		</dd>
-<?php endif; ?>
-<?php if ($params->get('show_publish_date')) : ?>
-		<dd class="published">
-		<?php echo JText::sprintf('COM_FJRELATED_PUBLISHED_DATE', JHTML::_('date',$this->item->publish_up, JText::_('DATE_FORMAT_LC2'))); ?>
-		</dd>
-<?php endif; ?>
-<?php if ($params->get('show_author') && !empty($this->item->author )) : ?>
-	<dd class="createdby">
-		<?php $author =  $this->item->author; ?>
-		<?php $author = ($this->item->created_by_alias ? $this->item->created_by_alias : $author);?>
-
-			<?php if (!empty($this->item->contactid ) &&  $params->get('link_author') == true):?>
-				<?php 	echo JText::sprintf('COM_FJRELATED_WRITTEN_BY' ,
-				 JHTML::_('link',JRoute::_('index.php?option=com_contact&view=contact&id='.$this->item->contactid),$author)); ?>
-
-			<?php else :?>
-				<?php echo JText::sprintf('COM_FJRELATED_WRITTEN_BY', $author); ?>
-			<?php endif; ?>
-	</dd>
-<?php endif; ?>
-<?php if ($params->get('show_hits')) : ?>
-		<dd class="hits">
-		<?php echo JText::sprintf('COM_FJRELATED_ARTICLE_HITS', $this->item->hits); ?>
-		</dd>
-<?php endif; ?>
 <?php if ($showCount) : ?>
 	<dd class="match_count">
 	<?php echo JText::sprintf('COM_FJRELATED_ARTICLE_MATCH_COUNT', $this->item->match_count)?>
@@ -234,18 +174,17 @@ $info = $this->item->params->get('info_block_position', 0);?>
 		$returnURL = JRoute::_(ContentHelperRoute::getArticleRoute($this->item->slug, $this->item->catid));
 		$link = new JURI($link1);
 		$link->setVar('return', base64_encode($returnURL));
-	endif;
-?>
-	<p class="readmore">
-		<a href="<?php echo $link; ?>">
-			<?php if (!$this->item->access_allowed) :
-				echo JText::_('COM_FJRELATED_REGISTER_TO_READ_MORE');
-			elseif ($readmore = $this->item->params->get('alternative_readmore', 0)) :
-				echo $readmore;
-			else :
-				echo JText::sprintf('COM_FJRELATED_READ_MORE', $this->escape($this->item->title));
-			endif; ?></a>
-			</p>
+	endif; ?>
+
+	<p class="readmore"><a class="btn" href="<?php echo $link; ?>"> <span class="icon-chevron-right"></span>
+	<?php if (!$this->item->access_allowed) :
+		echo JText::_('COM_FJRELATED_REGISTER_TO_READ_MORE');
+	elseif ($readmore = $this->item->params->get('alternative_readmore', 0)) :
+		echo $readmore;
+	else :
+		echo JText::sprintf('COM_FJRELATED_READ_MORE', $this->escape($this->item->title));
+	endif; ?></a>
+	</p>
 <?php endif; ?>
 
 <?php if ($this->item->state == 0) : ?>
