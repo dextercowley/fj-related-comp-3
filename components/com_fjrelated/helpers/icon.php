@@ -64,7 +64,7 @@ abstract class JHtmlIcon
 
 		$button = JHtml::_('link', JRoute::_($url), $text, $attribs);
 
-		$output = '<span class="hasTooltip" title="' . JHtml::tooltipText('COM_CONTENT_CREATE_ARTICLE') . '">' . $button . '</span>';
+		$output = '<span class="hasTooltip" title="' . JHtml::tooltipText('COM_FJRELATED_CREATE_ARTICLE') . '">' . $button . '</span>';
 
 		return $output;
 	}
@@ -154,7 +154,7 @@ abstract class JHtmlIcon
 			$checkoutUser = JFactory::getUser($article->checked_out);
 			$button       = JHtml::_('image', 'system/checked_out.png', null, null, true);
 			$date         = JHtml::_('date', $article->checked_out_time);
-			$tooltip      = JText::_('JLIB_HTML_CHECKED_OUT') . ' :: ' . JText::sprintf('COM_CONTENT_CHECKED_OUT_BY', $checkoutUser->name) . ' <br /> ' . $date;
+			$tooltip      = JText::_('JLIB_HTML_CHECKED_OUT') . ' :: ' . JText::sprintf('COM_FJRELATED_CHECKED_OUT_BY', $checkoutUser->name) . ' <br /> ' . $date;
 
 			return '<span class="hasTooltip" title="' . JHtml::tooltipText($tooltip. '', 0) . '">' . $button . '</span>';
 		}
@@ -176,7 +176,7 @@ abstract class JHtmlIcon
 		$overlib .= '&lt;br /&gt;';
 		$overlib .= $date;
 		$overlib .= '&lt;br /&gt;';
-		$overlib .= JText::sprintf('COM_CONTENT_WRITTEN_BY', htmlspecialchars($author, ENT_COMPAT, 'UTF-8'));
+		$overlib .= JText::sprintf('COM_FJRELATED_WRITTEN_BY', htmlspecialchars($author, ENT_COMPAT, 'UTF-8'));
 
 		if ($legacy)
 		{
@@ -186,7 +186,7 @@ abstract class JHtmlIcon
 		else
 		{
 			$icon = $article->state ? 'edit' : 'eye-close';
-			$text = '<span class="hasTooltip icon-' . $icon . ' tip" title="' . JHtml::tooltipText(JText::_('COM_CONTENT_EDIT_ITEM'), $overlib, 0) . '"></span>&#160;' . JText::_('JGLOBAL_EDIT') . '&#160;';
+			$text = '<span class="hasTooltip icon-' . $icon . ' tip" title="' . JHtml::tooltipText(JText::_('COM_FJRELATED_EDIT_ITEM'), $overlib, 0) . '"></span>&#160;' . JText::_('JGLOBAL_EDIT') . '&#160;';
 		}
 
 		$output = JHtml::_('link', JRoute::_($url), $text, $attribs);

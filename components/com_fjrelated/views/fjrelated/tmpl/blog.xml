@@ -9,14 +9,14 @@
 	
 
 	<fields name="params" addfieldpath="/administrator/components/com_fjrelated/fields" >
-		<fieldset name="required" label="COM_FJ_RELATED_REQUIRED">
-			<field name="COM_FJ_RELATED_REQUIRED_DESC" type="spacer" />
+		<fieldset name="required" label="COM_FJRELATED_REQUIRED">
+			<field name="COM_FJRELATED_REQUIRED_DESC" type="spacer" />
 			<field name="id" type="fjarticle" default="0" label="COM_FJRELATED_INTRO_ARTICLE"
 				description="COM_FJRELATED_ARTICLETOMATCH" />
 			<field name="keywords" type="textarea" rows="2" cols="30" default=""
 				label="COM_FJRELATED_Keywords" description="COM_FJRELATED_KEYWORDS_DESC" />
 		</fieldset>
-		<fieldset name="selection_options" label="COM_FJ_RELATED_SELECTION_OPTIONS">
+		<fieldset name="selection_options" label="COM_FJRELATED_SELECTION_OPTIONS">
 			<field name="layout_type" type="hidden" default="blog"
 			/>
 			<field name="anyOrAll" type="list" default="any"
@@ -50,7 +50,7 @@
 				<option value="1">JYES</option>
 			</field>
 		</fieldset>
-		<fieldset name="blog_options" label="COM_FJ_RELATED_BLOG_OPTIONS">
+		<fieldset name="blog_options" label="COM_FJRELATED_BLOG_OPTIONS">
 			<field name="showTitle" type="radio" default="0" label="COM_FJRELATED_Intro_Article_title"
 				description="COM_FJRELATED_Intro_Article_title_DESC">
 				<option value="0">JHide</option>
@@ -100,7 +100,7 @@
 				size="30"
 			/>
 		</fieldset>
-		<fieldset name="article_options" label="COM_FJ_RELATED_ARTICLE_OPTIONS">
+		<fieldset name="article_options" label="COM_FJRELATED_ARTICLE_OPTIONS">
 			<field name="link_to_fjrelated" type="radio" default="0"
 				label="COM_FJRELATED_LINK_TO" description="COM_FJRELATED_LINK_TO_DESC">
 				<option value="0">JNO</option>
@@ -203,7 +203,7 @@
 				<option value="use_article">COM_FJRELATED_USE_ARTICLE_SETTINGS</option>
 			</field>
 		</fieldset>
-		<fieldset name="feed_options" label="COM_FJ_RELATED_FEED_OPTIONS">
+		<fieldset name="feed_options" label="COM_FJRELATED_FEED_OPTIONS">
 			<field name="show_feed_link" type="radio" default="1"
 				label="JGLOBAL_SHOW_FEED_LINK_LABEL" description="JGLOBAL_SHOW_FEED_LINK_DESC">
 				<option value="0">JNO</option>

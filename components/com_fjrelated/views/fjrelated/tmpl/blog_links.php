@@ -7,7 +7,7 @@
  */
 // no direct access
 defined('_JEXEC') or die('Restricted access'); ?>
-<h3><?php echo JText::_('COM_FJ_RELATED_MORE_ARTICLES'); ?></h3>
+<h3><?php echo JText::_('COM_FJRELATED_MORE_ARTICLES'); ?></h3>
 
 <ol>
 <?php foreach ($this->link_items as &$item) : ?>

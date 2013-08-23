@@ -7,14 +7,14 @@
 		<help url="http://joomlacode.org/gf/project/freejoomla/wiki/?pagename=FJ+Related+Component+2011+List+Options" />
 	</layout>
 	<fields name="params" addfieldpath="/administrator/components/com_fjrelated/fields" >
-		<fieldset name="required" label="COM_FJ_RELATED_REQUIRED">
-			<field name="COM_FJ_RELATED_REQUIRED_DESC" type="spacer" />
+		<fieldset name="required" label="COM_FJRELATED_REQUIRED">
+			<field name="COM_FJRELATED_REQUIRED_DESC" type="spacer" />
 			<field name="id" type="fjarticle" default="0" label="COM_FJRELATED_INTRO_ARTICLE"
 				description="COM_FJRELATED_ARTICLETOMATCH" />
 			<field name="keywords" type="textarea" rows="2" cols="30" default=""
 				label="COM_FJRELATED_Keywords" description="COM_FJRELATED_KEYWORDS_DESC" />
 		</fieldset>
-		<fieldset name="selection_options" label="COM_FJ_RELATED_SELECTION_OPTIONS">
+		<fieldset name="selection_options" label="COM_FJRELATED_SELECTION_OPTIONS">
 			<field name="anyOrAll" type="list" default="any"
 				label = "COM_FJRELATED_MATCH_ANY_ALL" description="COM_FJRELATED_ANYORALL">
 				<option value="any">COM_FJRELATED_Any</option>
@@ -46,7 +46,7 @@
 				<option value="1">JYES</option>
 			</field>
 		</fieldset>
-		<fieldset name="list_options" label="COM_FJ_RELATED_LIST_OPTIONS">
+		<fieldset name="list_options" label="COM_FJRELATED_LIST_OPTIONS">
 			<field name="showTitle" type="radio" default="0" label="COM_FJRELATED_INTRO_ARTICLE_TITLE"
 				description="COM_FJRELATED_INTRO_ARTICLE_TITLE_DESC">
 				<option value="0">JHIDE</option>
@@ -138,7 +138,7 @@
 				<option value="1">JSHOW</option>
 			</field>
 		</fieldset>
-		<fieldset name="feed_options" label="COM_FJ_RELATED_FEED_OPTIONS">
+		<fieldset name="feed_options" label="COM_FJRELATED_FEED_OPTIONS">
 			<field name="show_feed_link" type="radio" default="1"
 				label="JGLOBAL_SHOW_FEED_LINK_LABEL" description="JGLOBAL_SHOW_FEED_LINK_DESC">
 				<option value="0">JNO</option>
