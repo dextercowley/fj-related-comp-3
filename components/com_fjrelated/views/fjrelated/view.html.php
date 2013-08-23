@@ -63,15 +63,15 @@ class FJRelatedViewFJRelated extends JViewLegacy
 
 		// Request variables
 		$layout     = $params->get('layout_type');
-		$task		= JRequest::getCmd('task');
+		$task		= $app->input->getCmd('task');
 
 
 		$numIntro		= $params->get('num_intro_articles', 4);
 		$numLeading	= $params->get('num_leading_articles', 1);
 		$numLinks		= $params->get('num_links', 4);
 
-		$limitstart	= JRequest::getVar('limitstart', 0, '', 'int');
-		$itemid = JRequest::getInt('Itemid',0);
+		$limitstart	= $app->input->getUInt('limitstart', 0);
+		$itemid = $app->input->getUInt('Itemid',0);
 
 		$params->def('display_num', $app->getCfg('list_limit'));
 		$default_limit = $params->get('display_num');
@@ -84,10 +84,7 @@ class FJRelatedViewFJRelated extends JViewLegacy
 			$limit  = $app->getUserStateFromRequest('com_fjrelated.list.:' .$itemid. '.limit', 'limit', $default_limit, 'int');
 		}
 
-
-
-
-		JRequest::setVar('limit', (int) $limit);
+		$app->input->set('limit', (int) $limit);
 
 		$contentConfig = JComponentHelper::getParams('com_content');
 		$params->def('show_page_title', $contentConfig->get('show_title'));

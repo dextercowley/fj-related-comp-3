@@ -30,7 +30,7 @@ class FJRelatedViewFJRelated extends JViewLegacy
 		$siteEmail	= $app->getCfg('mailfrom');
 
 		// Get some data from the model
-		JRequest::setVar('limit', $app->getCfg('feed_limit'));
+		$app->input->set('limit', $app->getCfg('feed_limit'));
 		$article	= & $this->get( 'Article' );
 		$rows 		= & $this->get( 'Data' );
 

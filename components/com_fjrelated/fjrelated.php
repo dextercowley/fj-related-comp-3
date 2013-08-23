@@ -16,7 +16,7 @@ jimport('joomla.application.component.controller');
 
 // Create the controller
 $controller = JControllerLegacy::getInstance('FJRelated');
-$controller->execute(JRequest::getCmd('task'));
+$controller->execute(JFactory::getApplication()->input->getCmd('task'));
 $controller->redirect();
 
 ?>

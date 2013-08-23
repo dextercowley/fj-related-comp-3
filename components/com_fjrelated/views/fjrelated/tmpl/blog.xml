@@ -6,13 +6,18 @@
 		</message>
 		<help url="http://joomlacode.org/gf/project/freejoomla/wiki/?pagename=FJ+Related+Component+2011+Blog+Options" />
 	</layout>
-	
+	<!-- Add fields to the request variables for the layout. -->
+	<fields name="request">
+		<fieldset name="request">
+		<field name="id" type="fjarticle" default="0" label="COM_FJRELATED_INTRO_ARTICLE"
+				description="COM_FJRELATED_ARTICLETOMATCH" />
+		</fieldset>
+	</fields>	
 
 	<fields name="params" addfieldpath="/administrator/components/com_fjrelated/fields" >
 		<fieldset name="required" label="COM_FJ_RELATED_REQUIRED">
 			<field name="COM_FJ_RELATED_REQUIRED_DESC" type="spacer" />
-			<field name="id" type="fjarticle" default="0" label="COM_FJRELATED_INTRO_ARTICLE"
-				description="COM_FJRELATED_ARTICLETOMATCH" />
+			
 			<field name="keywords" type="textarea" rows="2" cols="30" default=""
 				label="COM_FJRELATED_Keywords" description="COM_FJRELATED_KEYWORDS_DESC" />
 		</fieldset>

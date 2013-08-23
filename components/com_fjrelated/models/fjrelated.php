@@ -240,11 +240,11 @@ class FJRelatedModelFJRelated extends JModelList
 					' CASE WHEN CHAR_LENGTH(a.alias) THEN CONCAT_WS(":", a.id, a.alias) ELSE a.id END as slug,'.
 					' CASE WHEN CHAR_LENGTH(cc.alias) THEN CONCAT_WS(":", cc.id, cc.alias) ELSE cc.id END as catslug,'.
 					' cc.published AS cat_pub, ' .
-					' cc.access AS cat_access '.$voting['select'].
+					' cc.access AS cat_access ' . $voting['select'].
 					' FROM #__content AS a' .
 					' LEFT JOIN #__categories AS cc ON cc.id = a.catid' .
 					' LEFT JOIN #__users AS u ON u.id = a.created_by' .
-			$voting['join'].
+			$voting['join'] .
 			$where;
 			$this->_db->setQuery($query);
 			$this->_article = $this->_db->loadObject();
@@ -287,7 +287,7 @@ class FJRelatedModelFJRelated extends JModelList
 		$params->merge($aparams);
 
 		// Set the popup configuration option based on the request
-		$pop = JRequest::getVar('pop', 0, '', 'int');
+		$pop = $app->input->get('pop', 0, 'int');
 		$params->set('popup', $pop);
 
 		// Are we showing introtext with the article
@@ -314,7 +314,7 @@ class FJRelatedModelFJRelated extends JModelList
 
 		$user		= JFactory::getUser();
 		$aid		= (int) $user->get('aid', 0);
-		$id 		= JRequest::getVar('id', 0, '', 'int');
+		$id 		= $app->getUInt('id', 0);
 
 		$jnow		= JFactory::getDate();
 		$now		= $jnow->toSql();
@@ -522,7 +522,7 @@ class FJRelatedModelFJRelated extends JModelList
 	function _buildContentOrderBy($defaultOrder)
 	{
 		$app = JFactory::getApplication();
-		$itemid = JRequest::getInt('Itemid',0);
+		$itemid = $app->input->getUInt('Itemid',0);
 		$filter_order  = $app->getUserStateFromRequest('com_fjrelated.list.:' . $itemid . '.filter_order', 'filter_order', '', 'string');
 		$filter_order_Dir = $app->getUserStateFromRequest('com_fjrelated.list.:' . $itemid . '.filter_order_Dir', 'filter_order_Dir', '', 'cmd');
 
@@ -572,6 +572,7 @@ class FJRelatedModelFJRelated extends JModelList
 	 */
 	function _loadData($state = 1)
 	{
+		$app = JFactory::getApplication();
 		if (empty($this->_article)) {
 			return false;
 		}
@@ -579,8 +580,8 @@ class FJRelatedModelFJRelated extends JModelList
 		if (empty($this->_content[$state]))
 		{
 			// Get the pagination request variables
-			$limit		= JRequest::getVar('limit', 0, '', 'int');
-			$limitstart	= JRequest::getVar('limitstart', 0, '', 'int');
+			$limit		= $app->input->getUInt('limit', 0);
+			$limitstart	= $app->input->getUInt('limitstart', 0);
 
 			$query = $this->_buildQuery();
 			$rows = $this->_getFJRelatedList($query, $limitstart, $limit);
@@ -608,7 +609,7 @@ class FJRelatedModelFJRelated extends JModelList
 		$groups = $user->getAuthorisedViewLevels();
 
 		// Variables to check to see if we are responding to a user column sort
-		$itemid = JRequest::getVar('Itemid');
+		$itemid = $app->input->getUInt('Itemid');
 		$filter_order  = $app->getUserStateFromRequest('com_fjrelated.list.:' . $itemid . '.filter_order', 'filter_order', '', 'string');
 		$filter_order_Dir = $app->getUserStateFromRequest('com_fjrelated.list.:' . $itemid . '.filter_order_Dir', 'filter_order_Dir', '', 'cmd');
 
@@ -783,7 +784,7 @@ class FJRelatedModelFJRelated extends JModelList
 	 */
 	function _getFilterWhere($filterType)
 	{
-		$filter = JRequest::getString('filter-search', '', 'request');
+		$filter = JFactory::getApplication()->input->getString('filter-search', '');
 
 		$filterWhere = '';
 		if ($filter)
@@ -866,16 +867,16 @@ class FJRelatedModelFJRelated extends JModelList
 	 */
 	protected function populateState($ordering = 'ordering', $direction = 'ASC')
 	{
-		$app = JFactory::getApplication();
+		$app = JFactory::getApplication('site');
 
 		// List state information
-		$value = JRequest::getInt('limit', $app->getCfg('list_limit', 0));
+		$value = $app->input->getUInt('limit', $app->getCfg('list_limit', 0));
 		$this->setState('list.limit', $value);
 
-		$value = JRequest::getInt('limitstart', 0);
+		$value = $app->input->getUInt('limitstart', 0);
 		$this->setState('list.start', $value);
 
-		$itemid = JRequest::getInt('Itemid',0);
+		$itemid = $app->input->getUInt('Itemid',0);
 		$orderCol = $app->getUserStateFromRequest('com_fjrelated.list.:' . $itemid . '.filter_order', 'filter_order', '', 'string');
 		if (!in_array($orderCol, $this->filter_fields)) {
 			$orderCol = 'a.ordering';
@@ -891,7 +892,7 @@ class FJRelatedModelFJRelated extends JModelList
 
 		$params = $app->getParams();
 		$this->setState('params', $params);
-		$user		= JFactory::getUser();
+		$user = JFactory::getUser();
 
 		if ((!$user->authorise('core.edit.state', 'com_content')) &&  (!$user->authorise('core.edit', 'com_content'))){
 			// filter on published for those who do not have edit or edit.state rights.
@@ -908,12 +909,12 @@ class FJRelatedModelFJRelated extends JModelList
 			$this->setState('filter.access', false);
 		}
 
-		$this->setState('layout', JRequest::getCmd('layout'));
+		$this->setState('layout', $app->input->getCmd('layout'));
 
 		// Optional filter text
-		$this->setState('list.filter', JRequest::getString('filter-search'));
+		$this->setState('list.filter', $app->input->getString('filter-search'));
 
-		$this->setState('list.start', JRequest::getVar('limitstart', 0, '', 'int'));
+		$this->setState('list.start', $app->input->getUInt('limitstart', 0));
 
 	}
 

@@ -34,7 +34,7 @@ switch ($params->get('list_show_date'))
 $n			= count($this->items);
 $listOrder	= $this->escape($this->state->get('list.ordering'));
 $listDirn	= $this->escape($this->state->get('list.direction'));
-$filter 	= JRequest::getString('filter-search', '');
+$filter 	= JFactory::getApplication()->input->getString('filter-search', '');
 ?>
 
 <?php if (empty($this->items) && (!$filter)) : ?>
