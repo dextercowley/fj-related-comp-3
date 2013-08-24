@@ -66,9 +66,9 @@ class FJRelatedViewFJRelated extends JViewLegacy
 		$task		= $app->input->getCmd('task');
 
 
-		$numIntro		= $params->get('num_intro_articles', 4);
+		$numIntro = $params->get('num_intro_articles', 4);
 		$numLeading	= $params->get('num_leading_articles', 1);
-		$numLinks		= $params->get('num_links', 4);
+		$numLinks = $params->get('num_links', 4);
 
 		$limitstart	= $app->input->getUInt('limitstart', 0);
 		$itemid = $app->input->getUInt('Itemid',0);

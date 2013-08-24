@@ -13,7 +13,7 @@ JHtml::addIncludePath(JPATH_COMPONENT . '/helpers');
 // It will be a separate class if the user starts it with a space
 $pageClass = $this->params->get('pageclass_sfx');
 ?>
-<div class="blog<?php echo $pageClass;?>">
+<div class="blog-featured<?php echo $pageClass;?>">
 <?php if ( $this->params->get('show_page_heading')!=0) : ?>
 	<div class="page-header">
 		<h1><?php echo $this->escape($this->params->get('page_heading')); ?></h1>

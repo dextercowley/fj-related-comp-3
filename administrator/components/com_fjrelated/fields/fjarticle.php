@@ -64,7 +64,7 @@ class JFormFieldFJArticle extends JFormField
 			JError::raiseWarning(500, $error);
 		}
 
-		$noArticle = JText::_('COM_FJ_RELATED_NO_ARTICLE');
+		$noArticle = JText::_('COM_FJRELATED_NO_ARTICLE');
 
 		if (empty($title)) {
 			$title = $noArticle;
@@ -79,13 +79,13 @@ class JFormFieldFJArticle extends JFormField
 		// The article select button.
 		$html[] = '<div class="button2-left">';
 		$html[] = '  <div class="blank">';
-		$html[] = '	<a class="modal" title="'.JText::_('COM_FJ_RELATED_CHANGE_ARTICLE_DESC').'"  href="'.$link.'" rel="{handler: \'iframe\', size: {x: 800, y: 450}}">'.JText::_('COM_FJ_RELATED_CHANGE_ARTICLE').'</a>';
+		$html[] = '	<a class="modal" title="'.JText::_('COM_FJRELATED_CHANGE_ARTICLE_DESC').'"  href="'.$link.'" rel="{handler: \'iframe\', size: {x: 800, y: 450}}">'.JText::_('COM_FJRELATED_CHANGE_ARTICLE').'</a>';
 		$html[] = '  </div>';
 		$html[] = '</div>';
 
 		// The article clear button.
-		$html[] = "<div class=\"button2-left\"><div class=\"blank\"><a title=\"".JText::_('COM_FJ_RELATED_NO_ARTICLE_DESC')."\" href=\"#\" onclick=\"jSelectArticle_jform_params_id('', '".$noArticle."', '');\">"
-			. JText::_( 'COM_FJ_RELATED_RESET' ) ." </a></div></div>";
+		$html[] = "<div class=\"button2-left\"><div class=\"blank\"><a title=\"".JText::_('COM_FJRELATED_NO_ARTICLE_DESC')."\" href=\"#\" onclick=\"jSelectArticle_jform_params_id('', '".$noArticle."', '');\">"
+			. JText::_( 'COM_FJRELATED_RESET' ) ." </a></div></div>";
 
 		// The active article id field.
 		if (0 == (int)$this->value) {
