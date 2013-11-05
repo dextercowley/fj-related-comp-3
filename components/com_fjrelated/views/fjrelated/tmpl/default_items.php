@@ -9,10 +9,10 @@
 defined('_JEXEC') or die;
 
 JHtml::addIncludePath(JPATH_COMPONENT.'/helpers/html');
-JHtml::_('behavior.tooltip');
+JHtml::_('behavior.framework');
 
 // Create some shortcuts.
-$params		= $this->params;
+$params	= $this->params;
 // Get the order by for the date column
 switch ($params->get('list_show_date'))
 {
@@ -43,39 +43,38 @@ $filter 	= JFactory::getApplication()->input->getString('filter-search', '');
 	<?php endif; ?>
 
 <?php else : ?>
-
-<form action="<?php echo JFilterOutput::ampReplace(JFactory::getURI()->toString()); ?>" method="post" name="adminForm" id="adminForm">
+<form action="<?php echo htmlspecialchars(JUri::getInstance()->toString()); ?>" method="post" name="adminForm" id="adminForm" class="form-inline">
 	<?php if ($this->params->get('show_headings') || $this->params->get('filter_type') != 'none' || $this->params->get('show_pagination_limit')) :?>
-	<fieldset class="filters">
+	<fieldset class="filters btn-toolbar clearfix">
 		<?php if ($this->params->get('filter_type') != 'none') :?>
-		<legend class="hidelabeltxt">
-			<?php echo JText::_('JGLOBAL_FILTER_LABEL'); ?>
-		</legend>
-
-		<div class="filter-search">
-			<label class="filter-search-lbl" for="filter-search"><?php echo JText::_('COM_FJRELATED_'.$this->params->get('filter_type').'_FILTER_LABEL').'&#160;'; ?></label>
-			<input type="text" name="filter-search" id="filter-search" value="<?php echo $this->escape($this->state->get('list.filter')); ?>" class="inputbox" onchange="document.adminForm.submit();" title="<?php echo JText::_('COM_FJRELATED_FILTER_SEARCH_DESC'); ?>" />
-		</div>
+			<div class="btn-group">
+				<label class="filter-search-lbl element-invisible" for="filter-search">
+					<?php echo JText::_('COM_FJRELATED_'.$this->params->get('filter_type').'_FILTER_LABEL').'&#160;'; ?>
+				</label>
+				<input type="text" name="filter-search" id="filter-search" value="<?php echo $this->escape($this->state->get('list.filter')); ?>" class="inputbox" onchange="document.adminForm.submit();" title="<?php echo JText::_('COM_FJRELATED_FILTER_SEARCH_DESC'); ?>" placeholder="<?php echo JText::_('COM_FJRELATED_' . $params->get('filter_type') .'_FILTER_LABEL'); ?>" />
+			</div>
 		<?php endif; ?>
-
 		<?php if ($this->params->get('show_pagination_limit')) : ?>
-		<div class="display-limit">
-			<?php echo JText::_('JGLOBAL_DISPLAY_NUM'); ?>&#160;
-			<?php echo $this->pagination->getLimitBox(); ?>
-		</div>
+			<div class="btn-group pull-right">
+				<label for="limit" class="element-invisible">
+					<?php echo JText::_('JGLOBAL_DISPLAY_NUM'); ?>
+				</label>
+				<?php echo $this->pagination->getLimitBox(); ?>
+			</div>
 		<?php endif; ?>
 
 		<input type="hidden" name="filter_order" value="" />
 		<input type="hidden" name="filter_order_Dir" value="" />
 		<input type="hidden" name="limitstart" value="" />
+		<input type="hidden" name="task" value="" />
 	</fieldset>
 	<?php endif; ?>
 
-	<table class="category">
+	<table class="category table table-striped table-bordered table-hover">
 		<?php if ($this->params->get('show_headings')) :?>
 		<thead>
 			<tr>
-				<th class="list-title" id="tableOrdering">
+				<th class="categorylist_header_title" id="tableOrdering">
 					<?php  echo JHtml::_('grid.sort', 'JGLOBAL_TITLE', 'a.title', $listDirn, $listOrder) ; ?>
 				</th>
 				<?php if ($this->params->get('showMatchCount')) : ?>
