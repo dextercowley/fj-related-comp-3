@@ -383,7 +383,7 @@ class FJRelatedModelFJRelated extends JModelList
 				$key = trim($key);
 				if ($key) {
 					// surround with commas so first and last items have surrounding commas
-					$likes[] = ',' . $this->_db->getEscaped($key) . ',';
+					$likes[] = ',' . $this->_db->escape($key) . ',';
 				}
 			}
 			$ordering 	= $params->get('ordering', 'alpha');
@@ -792,7 +792,7 @@ class FJRelatedModelFJRelated extends JModelList
 			// clean filter variable
 			$filter = JString::strtoupper($filter);
 			$hitsFilter = intval($filter);
-			$filter	= $this->_db->Quote( '%'.$this->_db->getEscaped( $filter, true ).'%', false );
+			$filter	= $this->_db->Quote( '%'.$this->_db->escape( $filter, true ).'%', false );
 
 			switch ($filterType)
 			{
