@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE install SYSTEM "component-install.dtd">
-<!--  <!DOCTYPE install SYSTEM "http://www.joomla.org/xml/dtd/1.5/component-install.dtd"> -->
-<extension method="upgrade" type="component" version="1.6.0">
+<extension method="upgrade" type="component" version="3.0.0">
 	<name>com_fjrelated</name>
 	<creationDate>August 2011</creationDate>
 	<author>Mark Dexter</author>
@@ -13,6 +11,11 @@
 	<description>COM_FJRELATED_LAYOUT_DESC</description>
 	<installfile/>
 	<uninstallfile/>
+	<update> <!-- Runs on update; New in 2.5 -->
+		<schemas>
+			<schemapath type="mysql">sql/updates/mysql</schemapath>
+		</schemas>
+	</update>
 	<files folder="site">
 		<filename>controller.php</filename>
 		<filename>fjrelated.php</filename>
@@ -31,5 +34,11 @@
 			<folder>language</folder>
 		</files>
 	</administration>
+	<!-- The updateservers element is required to enable the automatic update. -->
+	<!-- It is used to add the rows to #__update_sites and #__update_sites_extensions tables -->
+	<updateservers>
+		<server type="extension" priority="1" name="FJRelated"
+			>http://joomlacode.org/gf/download/frsrelease/17130/91477/com_fjrelated_update.xml</server>
+	</updateservers>
 
 </extension>
