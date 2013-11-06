@@ -183,7 +183,7 @@ class FJRelatedViewFJRelated extends JViewLegacy
 			$this->intro_items[$i] = &$items[$i];
 		}
 
-		$this->columns = max(1, $params->def('num_columns', 1));
+		$this->columns = max(1, $params->get('num_columns', 1));
 		$order = $params->def('multi_column_order', 1);
 
 		if ($order == 0 && $this->columns > 1)
