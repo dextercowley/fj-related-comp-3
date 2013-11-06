@@ -41,7 +41,7 @@
 					UNION
 					(SELECT '2' AS value, 'Archived' as fjArticleState)" />
 			<field name="catid" type="category" extension="com_content" 
-				default="" multiple="multiple" size="5" 
+				default="" multiple="true" size="10" 
 				label="COM_FJRELATED_Select_Cats" description="COM_FJRELATED_Select_Cats_DESC"
 			 />
 			<field name="show_noauth" type="radio" default="0"
