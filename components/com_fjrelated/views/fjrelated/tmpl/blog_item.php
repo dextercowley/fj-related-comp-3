@@ -104,7 +104,7 @@ JHtml::_('behavior.framework');
 			<?php endif; ?>
 
 		<?php endif; ?>
-	</dl>
+
 <?php endif; ?>
 
 <?php if (isset($images->image_intro) && !empty($images->image_intro)) : ?>
@@ -134,9 +134,8 @@ JHtml::_('behavior.framework');
 	<?php echo JText::sprintf('COM_FJRELATED_ARTICLE_MATCH_LIST', implode($temp_list, ', '))?>
 	</dd>
 <?php endif; ?>
-<?php if (($params->get('show_author')) or ($params->get('show_category')) or ($params->get('show_create_date')) or ($params->get('show_modify_date')) or ($params->get('show_publish_date')) or ($params->get('show_parent_category')) or ($params->get('show_hits'))) : ?>
  </dl>
-<?php endif; ?>
+
 
 <?php echo $this->item->introtext; ?>
 
