@@ -595,6 +595,11 @@ class FJRelatedModelFJRelated extends JModelList
 		// Override because we have to allow
 		// for the possibility of processing after the query to count
 		// the number of matches
+		$related = array();
+		if (!$query)
+		{
+			return $related;
+		}
 		$app = JFactory::getApplication();
 		$db = $this->getDBO();
 		$params = $app->getParams();
