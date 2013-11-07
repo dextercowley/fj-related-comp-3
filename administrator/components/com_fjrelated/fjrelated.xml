@@ -7,7 +7,7 @@
 	<authorUrl>www.joomla.org</authorUrl>
 	<copyright>(C) 2008 - 2011 Mark Dexter. Portions Copyright(C) Open Source Matters. All rights reserved.</copyright>
 	<license>http://www.gnu.org/licenses/gpl.html</license>
-	<version>1.03</version>
+	<version>3.0.0</version>
 	<description>COM_FJRELATED_LAYOUT_DESC</description>
 	<installfile/>
 	<uninstallfile/>
@@ -20,7 +20,6 @@
 		<filename>controller.php</filename>
 		<filename>fjrelated.php</filename>
 		<filename>index.html</filename>
-		<filename>router.php</filename>
 		<folder>helpers</folder>
 		<folder>models</folder>
 		<folder>views</folder>
@@ -32,6 +31,7 @@
 			<filename>index.html</filename>
 			<folder>fields</folder>
 			<folder>language</folder>
+			<folder>sql</folder>
 		</files>
 	</administration>
 	<!-- The updateservers element is required to enable the automatic update. -->

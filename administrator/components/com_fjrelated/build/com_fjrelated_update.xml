@@ -1,7 +1,7 @@
 <!-- This is the update file to be maintained at the update URL in the . -->
 <updates>
 	<update>
-		<name>FJ_Related_Component</name>
+		<name>FJ Related Component</name>
 		<description>FJ Related Component Version 3.x</description>
 		<element>com_fjrelated</element>
 		<type>component</type>
