@@ -6,7 +6,7 @@
 		<element>com_fjrelated</element>
 		<type>component</type>
 		<!-- This will be the component version after the update. -->
-		<version>3.0.1</version>
+		<version>3.0.0</version>
 		<infourl title="FJ Related">http://joomlacode.org/gf/project/freejoomla/</infourl>
 		<downloads>
 			<!-- Careful: No spaces or new lines are allowed in the downloadurl. -->
