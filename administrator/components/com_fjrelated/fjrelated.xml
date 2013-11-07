@@ -38,7 +38,6 @@
 	<!-- It is used to add the rows to #__update_sites and #__update_sites_extensions tables -->
 	<updateservers>
 		<server type="extension" priority="1" name="FJRelated"
-			>http://localhost/joomla/fj-related-comp-3/administrator/components/com_fjrelated/build/com_fjrelated_update.xml</server>
-	</updateservers>
+			>https://raw.github.com/dextercowley/fj-related-comp-3/master/administrator/components/com_fjrelated/build/com_fjrelated_update.xml</server></updateservers>
 
 </extension>
