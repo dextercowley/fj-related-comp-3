@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension method="upgrade" type="component" version="3.0.0">
 	<name>com_fjrelated</name>
-	<creationDate>August 2011</creationDate>
+	<creationDate>November 2013</creationDate>
 	<author>Mark Dexter</author>
 	<authorEmail>dextercowley@gmail.com</authorEmail>
 	<authorUrl>www.joomla.org</authorUrl>
-	<copyright>(C) 2008 - 2011 Mark Dexter. Portions Copyright(C) Open Source Matters. All rights reserved.</copyright>
+	<copyright>(C) 2008 - 2013 Mark Dexter. Portions Copyright(C) Open Source Matters. All rights reserved.</copyright>
 	<license>http://www.gnu.org/licenses/gpl.html</license>
 	<version>3.0.0</version>
 	<description>COM_FJRELATED_LAYOUT_DESC</description>
@@ -38,7 +38,7 @@
 	<!-- It is used to add the rows to #__update_sites and #__update_sites_extensions tables -->
 	<updateservers>
 		<server type="extension" priority="1" name="FJRelated"
-			>http://raw.github.com/dextercowley/fj-related-comp-3/master/administrator/components/com_fjrelated/build/com_fjrelated_update.xml</server>
+			>http://localhost/joomla/fj-related-comp-3/administrator/components/com_fjrelated/build/com_fjrelated_update.xml</server>
 	</updateservers>
 
 </extension>
