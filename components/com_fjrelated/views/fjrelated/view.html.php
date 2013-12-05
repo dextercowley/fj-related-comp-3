@@ -88,8 +88,7 @@ class FJRelatedViewFJRelated extends JViewLegacy
 
 		$contentConfig = JComponentHelper::getParams('com_content');
 		$params->def('show_page_title', $contentConfig->get('show_title'));
-		$menu_params = new JRegistry( $menu->params );
-		if (!$menu_params->get( 'page_title'))
+		if (!$menu->params->get('page_title'))
 		{
 			$params->set('page_title',	($article->title) ? $article->title : $menu->title );
 		}
