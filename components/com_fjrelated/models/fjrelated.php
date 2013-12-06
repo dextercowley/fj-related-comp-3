@@ -686,6 +686,7 @@ class FJRelatedModelFJRelated extends JModelList
 				// Next process any use_article values in the options (only if we are in a blog)
 				$articleParams = new JRegistry($row->attribs);
 				$row->params = clone $params;
+				$row->params->set('access-view', true);
 				if ($params->get('layout_type') == 'blog') {
 					$menuParamsArray = $params->toArray();
 					$articleArray = array();
