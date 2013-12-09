@@ -6,12 +6,12 @@
 		<element>com_fjrelated</element>
 		<type>component</type>
 		<!-- This will be the component version after the update. -->
-		<version>3.0.0</version>
+		<version>3.0.1</version>
 		<infourl title="FJ Related">http://joomlacode.org/gf/project/freejoomla/</infourl>
 		<downloads>
 			<!-- Careful: No spaces or new lines are allowed in the downloadurl. -->
 			<!-- Placeholder URL until we actually have the 3.0.1 file. -->
-			<downloadurl type="full" format="zip">http://joomlacode.org/gf/download/frsrelease/17130/91489/com_fjrelated_update_test.zip</downloadurl>
+			<downloadurl type="full" format="zip">http://joomlacode.org/gf/download/frsrelease/18992/133964/com_fjrelated_3.0.1.zip</downloadurl>
 		</downloads>
 		<maintainer>Mark Dexter</maintainer>
 		<maintainerurl>http://joomlacode.org/gf/project/freejoomla/</maintainerurl>
