@@ -23,12 +23,6 @@ class FJRelatedViewFJRelated extends JViewLegacy
 	public function display($tpl = null)
 	{
 		$this->addToolbar();
-
-		if ($this->_layout == 'createtags')
-		{
-			$this->state = $this->get('state');
-		}
-
 		parent::display($tpl);
 	}
 
@@ -41,8 +35,9 @@ class FJRelatedViewFJRelated extends JViewLegacy
 	protected function addToolbar()
 	{
 		JToolbarHelper::title(JText::_('COM_FJRELATED_ARTICLES_COMPONENT_HELP'));
-		if (JFactory::getUser()->authorise('core.admin') && $this->_layout == 'default')
+		if (JFactory::getUser()->authorise('core.admin'))
 		{
+			JToolbarHelper::custom('createtags.showstats', 'cog', 'cog', 'COM_FJRELATED_SHOW_STATS', false, false);
 			JToolbarHelper::custom('createtags.createtags', 'tags', 'tags', 'COM_FJRELATED_CREATE_TAGS', false, false);
 		}
 	}

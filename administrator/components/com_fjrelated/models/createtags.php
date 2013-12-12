@@ -47,4 +47,15 @@ class FJRelatedModelCreatetags extends JModelList
 		JFactory::getApplication()->setUserState('com_fjrelated.createtags.data', $result);
 
 	}
+
+	public function showstats()
+	{
+		$result = array();
+		$result['keywordsRead'] = 5;
+		$result['tagsCreated'] = 6;
+		$result['uniqueArticles'] = 7;
+		$result['mapRows'] = 8;
+		JFactory::getApplication()->setUserState('com_fjrelated.showstats.data', $result);
+
+	}
 }

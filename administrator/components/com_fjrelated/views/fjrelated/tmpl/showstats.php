@@ -8,12 +8,12 @@
 
 // Check to ensure this file is included in Joomla!
 defined('_JEXEC') or die('Restricted access');
-$data = JFactory::getApplication()->getUserState('com_fjrelated.createtags.data', array());
+$data = JFactory::getApplication()->getUserState('com_fjrelated.showstats.data', array());
 
 ?>
 <form action="<?php echo JRoute::_('index.php?option=com_fjrelated'); ?>" method="post" name="adminForm" id="adminForm">
 
-<h2><?php echo JText::_('COM_FJRELATED_CREATE_TAGS_HEADING');?></h2>
+<h2><?php echo JText::_('COM_FJRELATED_SHOW_STATS_HEADING');?></h2>
 
 <ul>
 	<li><?php echo JText::sprintf('COM_FJRELATED_CREATE_TAGS_KEYWORDS_READ', $data['keywordsRead']); ?></li>

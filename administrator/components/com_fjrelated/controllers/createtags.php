@@ -36,4 +36,16 @@ class FJRelatedControllerCreatetags extends JControllerAdmin
 		}
 
 	}
+
+	/**
+	 * Shows statistics for current articles, keywords, and tags
+	 *
+	 */
+	public function showStats()
+	{
+		$model = $this->getModel('createtags');
+		$model->showstats();
+		$this->setRedirect(JRoute::_('index.php?option=com_fjrelated&layout=showstats', false));
+
+	}
 }
