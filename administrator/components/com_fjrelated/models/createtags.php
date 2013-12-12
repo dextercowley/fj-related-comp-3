@@ -15,7 +15,7 @@ defined('_JEXEC') or die;
  * @subpackage  com_fjrelated
  * @since       3.1
  */
-class FJRelatedModelCreatetags extends JModelAdmin
+class FJRelatedModelCreatetags extends JModelList
 {
 	protected $_context = 'com_fjrelated.createtags';
 
@@ -39,11 +39,12 @@ class FJRelatedModelCreatetags extends JModelAdmin
 
 	public function createtags()
 	{
-		$result = new stdClass();
-		$result->keywordsRead = 1;
-		$result->tagsCreated = 2;
-		$result->uniqueArticles = 3;
-		$result->mapRows = 4;
-		return $result;
+		$result = array();
+		$result['keywordsRead'] = 1;
+		$result['tagsCreated'] = 2;
+		$result['uniqueArticles'] = 3;
+		$result['mapRows'] = 4;
+		JFactory::getApplication()->setUserState('com_fjrelated.createtags.data', $result);
+
 	}
 }

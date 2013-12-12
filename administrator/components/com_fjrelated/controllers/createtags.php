@@ -15,7 +15,7 @@ defined('_JEXEC') or die;
  * @subpackage  com_fjrelated
  * @since       3.1
  */
-class AdminControllerCreateTags extends JControllerLegacy
+class FJRelatedControllerCreatetags extends JControllerAdmin
 {
 	/**
 	 * Creates tags from existing article keywords
@@ -25,7 +25,15 @@ class AdminControllerCreateTags extends JControllerLegacy
 	public function createTags()
 	{
 		$model = $this->getModel('createtags');
-		$results = $model->createTags();
-		$this->setRedirect(JRoute::_('index.php?option=com_fjrelated', false));
+		if (JFactory::getUser()->authorise('core.admin'))
+		{
+			$model->createTags();
+			$this->setRedirect(JRoute::_('index.php?option=com_fjrelated&layout=createtags', false));
+		}
+		else
+		{
+			return JError::raiseWarning(404, JText::_('JERROR_ALERTNOAUTHOR'));
+		}
+
 	}
 }

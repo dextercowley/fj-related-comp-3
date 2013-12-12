@@ -9,15 +9,9 @@
 // Check to ensure this file is included in Joomla!
 defined('_JEXEC') or die( 'Restricted access' );
 
-/**
- * Setup the Toolbar
- *
- * @since   1.6
- */
-
-
-
 ?>
+<form action="<?php echo JRoute::_('index.php?option=com_fjrelated'); ?>" method="post" name="adminForm" id="adminForm">
+
 <h2><?php echo JText::_('COM_FJRELATED_Introduction');?></h2>
 <p><?php echo JText::_('FJRC1');?>
 <a href="http://joomlacode.org/gf/project/freejoomla/wiki"
@@ -62,3 +56,5 @@ target="_blank">
 </ol>
 <p><?php echo JText::_('FJRC24');?>
 </p>
+	<input type="hidden" name="task" value="" />
+</form>
