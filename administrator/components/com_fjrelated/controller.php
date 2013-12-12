@@ -7,10 +7,13 @@
  */
 
 defined('_JEXEC') or die;
-JHtml::_('behavior.tabstate');
 
-// No access check.
-
-$controller	= JControllerLegacy::getInstance('FJRelated');
-$controller->execute(JFactory::getApplication()->input->get('task'));
-$controller->redirect();
+/**
+ * Admin Controller
+ *
+ * @package     com_fjrelated
+ * @since       3.1
+ */
+class FJRelatedController extends JControllerLegacy
+{
+}
