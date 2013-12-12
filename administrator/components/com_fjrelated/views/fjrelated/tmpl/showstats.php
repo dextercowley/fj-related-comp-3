@@ -16,10 +16,10 @@ $data = JFactory::getApplication()->getUserState('com_fjrelated.showstats.data',
 <h2><?php echo JText::_('COM_FJRELATED_SHOW_STATS_HEADING');?></h2>
 
 <ul>
-	<li><?php echo JText::sprintf('COM_FJRELATED_CREATE_TAGS_KEYWORDS_READ', $data['keywordsRead']); ?></li>
-	<li><?php echo JText::sprintf('COM_FJRELATED_CREATE_TAGS_TAGS_CREATED', $data['tagsCreated']); ?></li>
+	<li><?php echo JText::sprintf('COM_FJRELATED_CREATE_TAGS_EXISTING_KEYWORDS', $data['keywordsRead']); ?></li>
 	<li><?php echo JText::sprintf('COM_FJRELATED_CREATE_TAGS_UNIQUE_ARTICLES', $data['uniqueArticles']); ?></li>
-	<li><?php echo JText::sprintf('COM_FJRELATED_CREATE_TAGS_MAP_ROWS', $data['mapRows']); ?></li>
+	<li><?php echo JText::sprintf('COM_FJRELATED_CREATE_TAGS_EXISTING_TAGS', $data['existingTags']); ?></li>
+	<li><?php echo JText::sprintf('COM_FJRELATED_CREATE_TAGS_EXISTING_MAP_ROWS', $data['existingMapRows']); ?></li>
 </ul>
 <input type="hidden" name="task" value="" />
 </form>
