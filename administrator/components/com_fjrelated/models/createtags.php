@@ -42,11 +42,45 @@ class FJRelatedModelCreatetags extends JModelList
 	 */
 	public function createtags()
 	{
-		$result = array();
-		$result['keywordsRead'] = 1;
-		$result['tagsCreated'] = 2;
-		$result['uniqueArticles'] = 3;
-		$result['mapRows'] = 4;
+		$contentTable = JTable::getInstance('Content');
+		$contentTypeTable = JTable::getInstance('Contenttype');
+		$ucmId = $contentTypeTable-> getTypeId('com_content.article');
+		// Loop through articles in batches (so we can do AJAX calls for each batch later)
+		$batchSize = 5;
+		$batchPointer = 0;
+		$result['keywordsRead'] = 0;
+		$result['uniqueArticles'] = 0;
+		$result['mapRows'] = 0;
+		$result['tagsCreated'] = 0;
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true)
+			->select('id')
+			->from('#__content')
+			->where($db->quoteName('metakey') . ' > ""');
+		$db->setQuery($query, $batchPointer, $batchSize);
+		$rows = $db->loadObjectList();
+		while ($rows)
+		{
+			$batchPointer += $batchSize;
+			foreach ($rows as $row)
+			{
+				$result['uniqueArticles']++;
+
+				$contentTable->load($row->id);
+				$helper = new JHelperTags();
+				$helper->typeAlias = 'com_content.article';
+				$tagArray = array_map(array($this, 'processKeyword'), explode(',', $contentTable->metakey));
+
+				$result['keywordsRead'] += count($tagArray);
+				$tagResult = $helper->tagItem($ucmId, $contentTable, $tagArray, true);
+				if ($tagResult)
+				{
+					$result['mapRows'] += count($tagArray);
+				}
+			}
+			$db->setQuery($query, $batchPointer, $batchSize);
+		}
+
 		JFactory::getApplication()->setUserState('com_fjrelated.createtags.data', $result);
 
 	}
@@ -115,5 +149,10 @@ class FJRelatedModelCreatetags extends JModelList
 		->where('type_alias = ' . $db->quote('com_content.article'));
 		$db->setQuery($query);
 		return $db->loadResult();
+	}
+
+	public function processKeyword($keyword)
+	{
+		return trim('#new#' . $keyword);
 	}
 }
