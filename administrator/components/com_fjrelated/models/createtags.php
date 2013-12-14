@@ -44,6 +44,8 @@ class FJRelatedModelCreatetags extends JModelList
 	 */
 	public function createtags()
 	{
+		$startingTagCount = $this->getTagTotal();
+		$startingMapCount = $this->getTagMapTotal();
 		$contentTable = JTable::getInstance('Content');
 		$contentTypeTable = JTable::getInstance('Contenttype');
 		$this->tagsHelper = new JHelperTags();
@@ -78,16 +80,16 @@ class FJRelatedModelCreatetags extends JModelList
 				if (is_array($tagIds))
 				{
 					$taggedResults = $this->tagsHelper->tagItem($ucmId, $contentTable, $tagIds, true);
-					if ($taggedResults)
-					{
-						$result['mapRows'] += count($tagIds);
-					}
 				}
 			}
 			$db->setQuery($query, $batchPointer, $batchSize);
 			$rows = $db->loadObjectList();
 		}
 
+		$endingTagCount = $this->getTagTotal();
+		$result['tagsCreated'] = $endingTagCount - $startingTagCount;
+		$endingMapCount = $this->getTagMapTotal();
+		$result['mapRows'] = $endingMapCount - $startingMapCount;
 		JFactory::getApplication()->setUserState('com_fjrelated.createtags.data', $result);
 
 	}

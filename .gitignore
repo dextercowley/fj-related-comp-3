@@ -107,3 +107,7 @@
 /web.config.txt
 /robots.txt.dist
 /com_fjrelated*.zip
+/tests
+/travisci-phpunit.xml
+/build.xml
+/.travis.yml

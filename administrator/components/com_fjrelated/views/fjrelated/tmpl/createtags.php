@@ -16,9 +16,9 @@ $data = JFactory::getApplication()->getUserState('com_fjrelated.createtags.data'
 <h2><?php echo JText::_('COM_FJRELATED_CREATE_TAGS_HEADING');?></h2>
 
 <ul>
+	<li><?php echo JText::sprintf('COM_FJRELATED_CREATE_TAGS_UNIQUE_ARTICLES', $data['uniqueArticles']); ?></li>
 	<li><?php echo JText::sprintf('COM_FJRELATED_CREATE_TAGS_KEYWORDS_READ', $data['keywordsRead']); ?></li>
 	<li><?php echo JText::sprintf('COM_FJRELATED_CREATE_TAGS_TAGS_CREATED', $data['tagsCreated']); ?></li>
-	<li><?php echo JText::sprintf('COM_FJRELATED_CREATE_TAGS_UNIQUE_ARTICLES', $data['uniqueArticles']); ?></li>
 	<li><?php echo JText::sprintf('COM_FJRELATED_CREATE_TAGS_MAP_ROWS', $data['mapRows']); ?></li>
 </ul>
 <input type="hidden" name="task" value="" />
