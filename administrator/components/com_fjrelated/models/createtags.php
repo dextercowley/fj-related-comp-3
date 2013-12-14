@@ -19,6 +19,8 @@ class FJRelatedModelCreatetags extends JModelList
 {
 	protected $_context = 'com_fjrelated.createtags';
 
+	public $tagsHelper = null;
+
 	/**
 	 * Method to auto-populate the model state.
 	 *
@@ -44,6 +46,8 @@ class FJRelatedModelCreatetags extends JModelList
 	{
 		$contentTable = JTable::getInstance('Content');
 		$contentTypeTable = JTable::getInstance('Contenttype');
+		$this->tagsHelper = new JHelperTags();
+		$this->tagsHelper->typeAlias = 'com_content.article';
 		$ucmId = $contentTypeTable-> getTypeId('com_content.article');
 		// Loop through articles in batches (so we can do AJAX calls for each batch later)
 		$batchSize = 5;
@@ -67,18 +71,21 @@ class FJRelatedModelCreatetags extends JModelList
 				$result['uniqueArticles']++;
 
 				$contentTable->load($row->id);
-				$helper = new JHelperTags();
-				$helper->typeAlias = 'com_content.article';
-				$tagArray = array_map(array($this, 'processKeyword'), explode(',', $contentTable->metakey));
-
+				$tagArray = array_map(array($this, 'prepareTags'), explode(',', $contentTable->metakey));
 				$result['keywordsRead'] += count($tagArray);
-				$tagResult = $helper->tagItem($ucmId, $contentTable, $tagArray, true);
-				if ($tagResult)
+				$tagIds = $this->tagsHelper->createTagsFromField($tagArray);
+
+				if (is_array($tagIds))
 				{
-					$result['mapRows'] += count($tagArray);
+					$taggedResults = $this->tagsHelper->tagItem($ucmId, $contentTable, $tagIds, true);
+					if ($taggedResults)
+					{
+						$result['mapRows'] += count($tagIds);
+					}
 				}
 			}
 			$db->setQuery($query, $batchPointer, $batchSize);
+			$rows = $db->loadObjectList();
 		}
 
 		JFactory::getApplication()->setUserState('com_fjrelated.createtags.data', $result);
@@ -151,8 +158,9 @@ class FJRelatedModelCreatetags extends JModelList
 		return $db->loadResult();
 	}
 
-	public function processKeyword($keyword)
+	protected function prepareTags($tag)
 	{
-		return trim('#new#' . $keyword);
+		return '#new#' . trim($tag);
 	}
+
 }
