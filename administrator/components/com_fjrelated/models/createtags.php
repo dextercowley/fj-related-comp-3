@@ -79,7 +79,8 @@ class FJRelatedModelCreatetags extends JModelList
 
 				if (is_array($tagIds))
 				{
-					$taggedResults = $this->tagsHelper->tagItem($ucmId, $contentTable, $tagIds, true);
+					$contentTable->newTags = $tagIds;
+					$taggedResults = $contentTable->store();
 				}
 			}
 			$db->setQuery($query, $batchPointer, $batchSize);
