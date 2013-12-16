@@ -27,7 +27,7 @@ class FJRelatedControllerCreatetags extends JControllerAdmin
 		$model = $this->getModel('createtags');
 		if (JFactory::getUser()->authorise('core.admin'))
 		{
-			$model->createTags();
+			$model->getArticleCounts();
 			$this->setRedirect(JRoute::_('index.php?option=com_fjrelated&layout=createtags', false));
 		}
 		else

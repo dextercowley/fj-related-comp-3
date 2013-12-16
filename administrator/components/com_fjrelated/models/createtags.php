@@ -99,7 +99,7 @@ class FJRelatedModelCreatetags extends JModelList
 	 * Gets current counts or articles, keywords, tags, and tagged articles.
 	 * Stores them in the session for the layout to use.
 	 */
-	public function showstats()
+	public function getStats()
 	{
 		$articleCounts = $this->getArticleCounts();
 		$tagTotal = $this->getTagTotal();
@@ -109,8 +109,7 @@ class FJRelatedModelCreatetags extends JModelList
 		$result['uniqueArticles'] = $articleCounts[0];
 		$result['existingTags'] = $tagTotal;
 		$result['existingMapRows'] = $tagMapTotal;
-		JFactory::getApplication()->setUserState('com_fjrelated.showstats.data', $result);
-
+		return $result;
 	}
 
 	/**
@@ -118,7 +117,7 @@ class FJRelatedModelCreatetags extends JModelList
 	 *
 	 * @return  array  array(total article count, total keyword count)
 	 */
-	protected function getArticleCounts()
+	public function getArticleCounts()
 	{
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true)

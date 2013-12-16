@@ -8,7 +8,7 @@
 
 // Check to ensure this file is included in Joomla!
 defined('_JEXEC') or die('Restricted access');
-$data = JFactory::getApplication()->getUserState('com_fjrelated.showstats.data', array());
+$data = $this->data;
 
 ?>
 <form action="<?php echo JRoute::_('index.php?option=com_fjrelated'); ?>" method="post" name="adminForm" id="adminForm">

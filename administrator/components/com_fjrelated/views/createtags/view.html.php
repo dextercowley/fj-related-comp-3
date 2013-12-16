@@ -14,7 +14,7 @@ defined('_JEXEC') or die;
  * @package     com_fjrelated
  * @since       3.1
  */
-class FJRelatedViewFJRelated extends JViewLegacy
+class FJRelatedViewCreatetags extends JViewLegacy
 {
 
 	/**
@@ -22,6 +22,7 @@ class FJRelatedViewFJRelated extends JViewLegacy
 	 */
 	public function display($tpl = null)
 	{
+		$this->data = $this->get('Stats');
 		$this->addToolbar();
 		parent::display($tpl);
 	}
@@ -38,7 +39,7 @@ class FJRelatedViewFJRelated extends JViewLegacy
 		if (JFactory::getUser()->authorise('core.admin'))
 		{
 			$toolbar = JToolbar::getInstance('toolbar');
-			$toolbar->appendButton('Link', 'tags', 'COM_FJRELATED_SHOW_STATS', 'index.php?option=com_fjrelated&view=createtags');
+			$toolbar->appendButton('Link', 'tags', 'COM_FJRELATED_CREATE_TAGS', 'index.php?option=com_fjrelated&view=createtags');
 		}
 	}
 }
