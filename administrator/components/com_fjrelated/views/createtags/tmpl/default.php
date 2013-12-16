@@ -9,6 +9,8 @@
 // Check to ensure this file is included in Joomla!
 defined('_JEXEC') or die('Restricted access');
 $data = $this->data;
+JHtml::addIncludePath(JPATH_COMPONENT.'/helpers/html');
+JHtml::_('createtags.createtags', 'createTags');
 
 ?>
 <form action="<?php echo JRoute::_('index.php?option=com_fjrelated'); ?>" method="post" name="adminForm" id="adminForm">
