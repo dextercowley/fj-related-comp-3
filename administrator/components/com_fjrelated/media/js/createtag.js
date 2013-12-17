@@ -42,11 +42,12 @@
 				}
 			}
 			
-			function onError()
+			function onError(request, status, error)
 			{
 				// Need error handling here
-				$('#createtags-progress-container').hide();
-				$('#createtags-success-container').show();
+				$('#spinner').hide();
+				$('#createtags-error-container').show();
+				$('#error-message').text("Error code " + request.status + ": " + request.statusText);
 			}
 				
 		};

@@ -11,7 +11,7 @@
 			label="COM_FJRELATED_CONFIG_BATCH_SIZE_LABEL"
 			description="COM_FJRELATED_CONFIG_BATCH_SIZE_DESCRIPTION"
 			validate="options" >
-			<option value="2">J2</option>
+			<option value="1">J1</option>
 			<option value="5">J5</option>
 			<option value="25">J25</option>
 			<option value="50">J50</option>

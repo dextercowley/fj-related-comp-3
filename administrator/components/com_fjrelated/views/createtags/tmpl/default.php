@@ -38,6 +38,11 @@ JHtml::_('jquery.ui', array('core'));
 <h2><?php echo JText::_('COM_FJRELATED_CREATETAGS_SUCCESS_HEADING');?></h2>
 </div>
 
+<div id="createtags-error-container" style="display: none">
+<h2><?php echo JText::_('COM_FJRELATED_CREATETAGS_ERROR_HEADING');?></h2>
+<h3 id="error-message"></h3>
+</div>
+
 
 <input id="createtags-token" type="hidden" name="<?php echo JFactory::getSession()->getFormToken(); ?>" value="1" />
 
