@@ -107,10 +107,10 @@ class FJRelatedModelCreatetags extends JModelList
 		$tagTotal = $this->getTagTotal();
 		$tagMapTotal = $this->getTagMapTotal();
 		$result = array();
-		$result['keywordsRead'] = $articleCounts[1];
-		$result['uniqueArticles'] = $articleCounts[0];
-		$result['existingTags'] = $tagTotal;
-		$result['existingMapRows'] = $tagMapTotal;
+		$result['totalKeywords'] = $articleCounts[1];
+		$result['totalArticles'] = $articleCounts[0];
+		$result['totalTags'] = $tagTotal;
+		$result['totalMapRows'] = $tagMapTotal;
 		return $result;
 	}
 

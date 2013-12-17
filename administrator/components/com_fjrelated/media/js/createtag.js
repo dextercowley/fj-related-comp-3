@@ -10,10 +10,13 @@
 	{
 		var createTags = function() 
 		{
+			// Initialize spinner / progress bar
+			$('#createtags-progress-container').show();
 			var token = $('#createtags-token').attr('name') + '=1';
+			var jsonUrl = "index.php?option=com_fjrelated&task=batch.processbatch&format=json&" + token;
 			$.ajax
 			({
-				url : "index.php?option=com_fjrelated&task=batch.processbatch&format=json&" + token,
+				url : jsonUrl,
 				type : "POST",
 				dataType : "json",
 				success : onDataReceived,
@@ -22,14 +25,17 @@
 
 			function onDataReceived(data) 
 			{
-				// Need to update some counters
+				
 				if (data.articlesProcessed < data.totalArticles) 
 				{
-					createTags()
+					// Need to update some counters & show progress bar
+					createTags();
 				}
 				else
 				{
 					// Need to close things out with success message
+					$('#createtags-progress-container').hide();
+					$('#createtags-success-container').show();
 				}
 			}
 			
