@@ -25,7 +25,7 @@ class FJRelatedControllerBatch extends JControllerLegacy
 	public function processbatch()
 	{
 		// Check for a valid token. If invalid, send a 403 with the error message.
-// 		JSession::checkToken('request') or $this->sendResponse(new Exception(JText::_('JINVALID_TOKEN'), 403));
+		JSession::checkToken('request') or $this->sendResponse(new Exception(JText::_('JINVALID_TOKEN'), 403));
 
 		$model = $this->getModel('Createtags', 'FJRelatedModel');
 

@@ -6,24 +6,36 @@
  */
 (function ($) 
 {
-	$.FJCreateTags = function(start, batchSize) 
+	$.FJCreateTags = function() 
 	{
 		var createTags = function() 
 		{
+			var token = $('#createtags-token').attr('name') + '=1';
 			$.ajax
 			({
-				url : "index.php?option=com_fjrelated&task=batch.processbatch&format=json",
+				url : "index.php?option=com_fjrelated&task=batch.processbatch&format=json&" + token,
 				type : "POST",
 				dataType : "json",
-				success : onDataReceived
+				success : onDataReceived,
+				error: onError
 			});
 
 			function onDataReceived(data) 
 			{
+				// Need to update some counters
 				if (data.articlesProcessed < data.totalArticles) 
 				{
 					createTags()
 				}
+				else
+				{
+					// Need to close things out with success message
+				}
+			}
+			
+			function onError()
+			{
+				// Need error handling here
 			}
 				
 		};

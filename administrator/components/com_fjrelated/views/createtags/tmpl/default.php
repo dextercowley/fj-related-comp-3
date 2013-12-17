@@ -25,6 +25,6 @@ JHtml::_('createtags.createtags', 'createTags');
 </ul>
 <div id="createtags-progress-container"></div>
 <div id="createtags-success-container"></div>
-<input id="finder-indexer-token" type="hidden" name="<?php echo JFactory::getSession()->getFormToken(); ?>" value="1" />
+<input id="createtags-token" type="hidden" name="<?php echo JFactory::getSession()->getFormToken(); ?>" value="1" />
 
 </form>
