@@ -45,13 +45,14 @@ abstract class JHtmlCreatetags
 		// Depends on jQuery UI
 		$document = JFactory::getDocument();
 		JHtml::_('bootstrap.framework');
-
+		JHtml::_('behavior.keepalive');
+		$document->addScript('components/com_fjrelated/media/js/createtag.js', 'text/javascript', true);
 
 		JFactory::getDocument()->addScriptDeclaration("
 			(function ($){
 				$(document).ready(function (){
     			$('#createTags').click(function() {
-					alert('button clicked!');
+					var createTags = new $.FJCreateTags();
 				});
 				});
 			})(jQuery);

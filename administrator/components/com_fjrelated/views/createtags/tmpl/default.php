@@ -23,5 +23,8 @@ JHtml::_('createtags.createtags', 'createTags');
 	<li><?php echo JText::sprintf('COM_FJRELATED_CREATE_TAGS_EXISTING_TAGS', $data['existingTags']); ?></li>
 	<li><?php echo JText::sprintf('COM_FJRELATED_CREATE_TAGS_EXISTING_MAP_ROWS', $data['existingMapRows']); ?></li>
 </ul>
-<input type="hidden" name="task" value="" />
+<div id="createtags-progress-container"></div>
+<div id="createtags-success-container"></div>
+<input id="finder-indexer-token" type="hidden" name="<?php echo JFactory::getSession()->getFormToken(); ?>" value="1" />
+
 </form>

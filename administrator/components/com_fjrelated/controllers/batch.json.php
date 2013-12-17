@@ -24,24 +24,19 @@ class FJRelatedControllerBatch extends JControllerLegacy
 	 */
 	public function processbatch()
 	{
+		// Check for a valid token. If invalid, send a 403 with the error message.
+// 		JSession::checkToken('request') or $this->sendResponse(new Exception(JText::_('JINVALID_TOKEN'), 403));
+
 		$model = $this->getModel('Createtags', 'FJRelatedModel');
-		$input = JFactory::getApplication()->input;
-		$totalArticles = $input->getInt('totalarticles', 0);
-		$totalKeywords = $input->getInt('totalkeywords', 0);
-		$processedArticles = $input->getInt('processedarticles', 0);
-		$processedKeywords = $input->getInt('processedkeyword', 0);
-		if ($totalArticles && ($totalArticles > $processedArticles))
-		{
 
+		$data = $model->createTags();
 
-			// Use the correct json mime-type
-			header('Content-Type: application/json');
+		// Use the correct json mime-type
+		header('Content-Type: application/json');
 
-			// Send the response.
-			echo json_encode($return);
-			JFactory::getApplication()->close();
-		}
-
+		// Send the response.
+		echo json_encode($data);
+		JFactory::getApplication()->close();
 
 	}
 }

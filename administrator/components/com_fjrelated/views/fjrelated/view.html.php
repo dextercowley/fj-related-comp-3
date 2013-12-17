@@ -39,6 +39,7 @@ class FJRelatedViewFJRelated extends JViewLegacy
 		{
 			$toolbar = JToolbar::getInstance('toolbar');
 			$toolbar->appendButton('Link', 'tags', 'COM_FJRELATED_SHOW_STATS', 'index.php?option=com_fjrelated&view=createtags');
+			JToolbarHelper::preferences('com_fjrelated');
 		}
 	}
 }
