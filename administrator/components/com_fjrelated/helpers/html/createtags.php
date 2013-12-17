@@ -47,6 +47,9 @@ abstract class JHtmlCreatetags
 		JHtml::_('bootstrap.framework');
 		JHtml::_('behavior.keepalive');
 		$document->addScript('components/com_fjrelated/media/js/createtag.js', 'text/javascript', true);
+		$document->addScript('components/com_fjrelated/media/js/jquery-ui-progressbar.js', 'text/javascript', true);
+		JFactory::getDocument()->addStyleSheet( JURI::root(true).'/administrator/components/com_fjrelated/media/css/jquery-ui-progressbar.css' );
+
 
 		JFactory::getDocument()->addScriptDeclaration("
 			(function ($){

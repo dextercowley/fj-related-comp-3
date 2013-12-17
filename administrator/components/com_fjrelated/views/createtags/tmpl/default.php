@@ -11,6 +11,7 @@ defined('_JEXEC') or die('Restricted access');
 $data = $this->data;
 JHtml::addIncludePath(JPATH_COMPONENT.'/helpers/html');
 JHtml::_('createtags.createtags', 'createTags');
+JHtml::_('jquery.ui', array('core'));
 
 ?>
 <form action="<?php echo JRoute::_('index.php?option=com_fjrelated'); ?>" method="post" name="adminForm" id="adminForm">
@@ -23,15 +24,14 @@ JHtml::_('createtags.createtags', 'createTags');
 	<li><?php echo JText::sprintf('COM_FJRELATED_CREATE_TAGS_EXISTING_MAP_ROWS', $data['totalMapRows']); ?></li>
 </ul>
 
-<di	v id="createtags-progress-container" style="display: none">
+<div id="createtags-progress-container" style="display: none">
 <h2><?php echo JText::_('COM_FJRELATED_CREATETAGS_PROGRESS_HEADING');?>
 	<?php echo JHtml::_('image', 'media/modal/spinner.gif', JText::_('COM_FJRELATED_CREATETAGS_SPINNER'),
 		array('class' => 'spinner', 'id' => 'spinner'), true);?>
 </h2>
 
-<div class="createtags-progress-bar">
-	<?php echo JHtml::_('image', 'media/bar.gif', JText::_('COM_FJRELATED_CREATETAGS_PROGRESS'),
-		array('class' => 'progress', 'id' => 'progress'), true);?>
+<div id="createtags-progress-bar">
+
 </div>
 </div>
 <div id="createtags-success-container" style="display: none">

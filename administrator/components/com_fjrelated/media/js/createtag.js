@@ -29,6 +29,9 @@
 				if (data.articlesProcessed < data.totalArticles) 
 				{
 					// Need to update some counters & show progress bar
+					$( "#createtags-progress-bar" ).progressbar({
+					      value: 100 * (data.articlesProcessed / data.totalArticles)
+					    });
 					createTags();
 				}
 				else
@@ -42,6 +45,8 @@
 			function onError()
 			{
 				// Need error handling here
+				$('#createtags-progress-container').hide();
+				$('#createtags-success-container').show();
 			}
 				
 		};
