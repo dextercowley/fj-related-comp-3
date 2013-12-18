@@ -12,6 +12,7 @@
 		{
 			// Initialize spinner / progress bar
 			$('#createtags-progress-container').show();
+			$('#createtags-progress-values').show();
 			var token = $('#createtags-token').attr('name') + '=1';
 			var jsonUrl = "index.php?option=com_fjrelated&task=batch.processbatch&format=json&" + token;
 			$.ajax
@@ -32,13 +33,21 @@
 					$( "#createtags-progress-bar" ).progressbar({
 					      value: 100 * (data.articlesProcessed / data.totalArticles)
 					    });
+					$('#articlesProcessed').text(data.articlesProcessed);
+					$('#keywordsProcessed').text(data.keywordsProcessed);
+					
 					createTags();
 				}
 				else
 				{
 					// Need to close things out with success message
 					$('#createtags-progress-container').hide();
+					$('#createtags-progress-bar').hide();
 					$('#createtags-success-container').show();
+					$('#articlesProcessed').text(data.articlesProcessed);
+					$('#keywordsProcessed').text(data.keywordsProcessed);
+					$('#tagsCreated').text(data.tagsCreated);
+					$('#tagMapsCreated').text(data.tagMapsCreated);
 				}
 			}
 			

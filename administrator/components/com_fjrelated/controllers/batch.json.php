@@ -30,6 +30,13 @@ class FJRelatedControllerBatch extends JControllerLegacy
 		$model = $this->getModel('Createtags', 'FJRelatedModel');
 
 		$data = $model->createTags();
+		if ($data['articlesProcessed'] >= $data['totalArticles'])
+		{
+			$data['endingTagCount'] = (int) $model->getTagTotal();
+			$data['endingTagMapCount'] = (int) $model->getTagMapTotal();
+			$data['tagsCreated'] = $data['endingTagCount'] - $data['startingTagCount'];
+			$data['tagMapsCreated'] = $data['endingTagMapCount'] - $data['startingTagMapCount'];
+		}
 
 		// Use the correct json mime-type
 		header('Content-Type: application/json');

@@ -136,7 +136,7 @@ class FJRelatedModelCreatetags extends JModelList
 	 *
 	 * @return  integer  total number of existing tag rows.
 	 */
-	protected function getTagTotal()
+	public function getTagTotal()
 	{
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true)
@@ -151,7 +151,7 @@ class FJRelatedModelCreatetags extends JModelList
 	 *
 	 * @return  integer  total number of existing tag mapping rows.
 	 */
-	protected function getTagMapTotal()
+	public function getTagMapTotal()
 	{
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true)

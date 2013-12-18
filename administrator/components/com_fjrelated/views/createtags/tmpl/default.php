@@ -29,14 +29,35 @@ JHtml::_('jquery.ui', array('core'));
 	<?php echo JHtml::_('image', 'media/modal/spinner.gif', JText::_('COM_FJRELATED_CREATETAGS_SPINNER'),
 		array('class' => 'spinner', 'id' => 'spinner'), true);?>
 </h2>
-
-<div id="createtags-progress-bar">
-
-</div>
 </div>
 <div id="createtags-success-container" style="display: none">
 <h2><?php echo JText::_('COM_FJRELATED_CREATETAGS_SUCCESS_HEADING');?></h2>
+
 </div>
+<div id="createtags-progress-bar"></div>
+
+
+<ul id="createtags-progress-values" style="display: none">
+		<li class="extprogrow">
+			<span class="extlabel"><?php echo JText::_('COM_FJRELATED_CREATE_TAGS_ARTICLES_PROCESSED'); ?></span>
+			<span class="extvalue" id="articlesProcessed"></span>
+		</li>
+		<li class="extprogrow">
+			<span class="extlabel"><?php echo JText::_('COM_FJRELATED_CREATE_TAGS_KEYWORDS_PROCESSED'); ?></span>
+			<span class="extvalue" id="keywordsProcessed"></span>
+		</li>
+		<li class="extprogrow">
+			<span class="extlabel"><?php echo JText::_('COM_FJRELATED_CREATE_TAGS_TAGS_CREATED'); ?></span>
+			<span class="extvalue" id="tagsCreated"></span>
+		</li>
+		<li class="extprogrow">
+			<span class="extlabel"><?php echo JText::_('COM_FJRELATED_CREATE_TAGS_TAG_MAPS_CREATED'); ?></span>
+			<span class="extvalue" id="tagMapsCreated"></span>
+		</li>
+</ul>
+
+
+
 
 <div id="createtags-error-container" style="display: none">
 <h2><?php echo JText::_('COM_FJRELATED_CREATETAGS_ERROR_HEADING');?></h2>
