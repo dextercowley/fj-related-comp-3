@@ -13,6 +13,7 @@
 			// Initialize spinner / progress bar
 			$('#createtags-progress-container').show();
 			$('#createtags-progress-values').show();
+			$('#createtags-progress-bar').progressbar();
 			var token = $('#createtags-token').attr('name') + '=1';
 			var jsonUrl = "index.php?option=com_fjrelated&task=batch.processbatch&format=json&" + token;
 			$.ajax
@@ -41,8 +42,10 @@
 				else
 				{
 					// Need to close things out with success message
-					$('#createtags-progress-container').hide();
-					$('#createtags-progress-bar').hide();
+					//$('#createtags-progress-container').hide();
+					//$('#createtags-progress-bar').hide();
+					$('#spinner').hide();
+					$('#createtags-progress-bar').progressbar({value: 100});
 					$('#createtags-success-container').show();
 					$('#articlesProcessed').text(data.articlesProcessed);
 					$('#keywordsProcessed').text(data.keywordsProcessed);

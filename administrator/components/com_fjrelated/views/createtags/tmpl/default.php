@@ -25,16 +25,13 @@ JHtml::_('jquery.ui', array('core'));
 </ul>
 
 <div id="createtags-progress-container" style="display: none">
-<h2><?php echo JText::_('COM_FJRELATED_CREATETAGS_PROGRESS_HEADING');?>
+<h2><?php echo JText::sprintf('COM_FJRELATED_CREATETAGS_PROGRESS_HEADING', $data['batchSize']);?>
 	<?php echo JHtml::_('image', 'media/modal/spinner.gif', JText::_('COM_FJRELATED_CREATETAGS_SPINNER'),
 		array('class' => 'spinner', 'id' => 'spinner'), true);?>
 </h2>
 </div>
-<div id="createtags-success-container" style="display: none">
-<h2><?php echo JText::_('COM_FJRELATED_CREATETAGS_SUCCESS_HEADING');?></h2>
 
-</div>
-<div id="createtags-progress-bar"></div>
+<div id="createtags-progress-bar" style="width: 50%"></div>
 
 
 <ul id="createtags-progress-values" style="display: none">
@@ -56,14 +53,14 @@ JHtml::_('jquery.ui', array('core'));
 		</li>
 </ul>
 
-
-
+<div id="createtags-success-container" style="display: none">
+<h2><?php echo JText::_('COM_FJRELATED_CREATETAGS_SUCCESS_HEADING');?></h2>
+</div>
 
 <div id="createtags-error-container" style="display: none">
 <h2><?php echo JText::_('COM_FJRELATED_CREATETAGS_ERROR_HEADING');?></h2>
 <h3 id="error-message"></h3>
 </div>
-
 
 <input id="createtags-token" type="hidden" name="<?php echo JFactory::getSession()->getFormToken(); ?>" value="1" />
 

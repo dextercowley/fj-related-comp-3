@@ -111,6 +111,7 @@ class FJRelatedModelCreatetags extends JModelList
 		$result['totalArticles'] = $articleCounts[0];
 		$result['totalTags'] = $tagTotal;
 		$result['totalMapRows'] = $tagMapTotal;
+		$result['batchSize'] = JComponentHelper::getParams('com_fjrelated')->get('batch_size', 100);
 		return $result;
 	}
 
