@@ -80,6 +80,7 @@ class FJRelatedModelCreatetags extends JModelList
 
 			$contentTable->load($row->id);
 			$tagArray = array_map(array($this,'prepareTags'), explode(',', $contentTable->metakey));
+			$tagArray = array_values(array_unique($tagArray));
 
 			$data['keywordsProcessed'] += count($tagArray);
 			$tagIds = $this->tagsHelper->createTagsFromField($tagArray);
