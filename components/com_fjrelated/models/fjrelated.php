@@ -263,6 +263,18 @@ class FJRelatedModelFJRelated extends JModelList
 				$this->_article->rating			= 0;
 			}
 
+			// Load the tags from the mapping table
+			$db = JFactory::getDbo();
+			$query = $db->getQuery(true);
+			$query->select('t.title')
+				->from('#__tags AS t')
+				->innerJoin('#__contentitem_tag_map AS m ON t.id = m.tag_id')
+				->where("m.type_alias = 'com_content.article'")
+				->where('content_item_id = ' . $this->_article->id)
+				->order('t.title ASC');
+			$db->setQuery($query);
+			$this->_article->tags = $db->loadColumn();
+
 			return true;
 		}
 		return true;
