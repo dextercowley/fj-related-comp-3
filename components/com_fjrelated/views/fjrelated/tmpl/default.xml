@@ -11,8 +11,15 @@
 			<field name="COM_FJRELATED_REQUIRED_DESC" type="spacer" />
 			<field name="id" type="fjarticle" default="0" label="COM_FJRELATED_INTRO_ARTICLE"
 				description="COM_FJRELATED_ARTICLETOMATCH" />
-			<field name="keywords" type="textarea" rows="2" cols="30" default=""
-				label="COM_FJRELATED_Keywords" description="COM_FJRELATED_KEYWORDS_DESC" />
+			<field 
+				name="tags" 
+				type="tag" 				
+				label="COM_FJRELATED_FIELD_TAG_LABEL"
+				description="COM_FJRELATED_FIELD_TAG_DESC"
+				custom="deny"
+				required="true"
+				multiple="true"
+			/>
 		</fieldset>
 		<fieldset name="selection_options" label="COM_FJRELATED_SELECTION_OPTIONS">
 			<field name="anyOrAll" type="list" default="any"

@@ -174,8 +174,8 @@ class FJRelatedModelFJRelated extends JModelList
 			$article->text			= '';
 			$app = JFactory::getApplication();
 			$params = $app->getParams();
-			$article->metakey		= $params->get('keywords');
-			$this->_article			= $article;
+			$article->tags = $params->get('tags');
+			$this->_article	= $article;
 		}
 
 		return $this->_article;
