@@ -268,14 +268,14 @@ class FJRelatedModelFJRelated extends JModelList
 			// Load the tags from the mapping table
 			$db = JFactory::getDbo();
 			$query = $db->getQuery(true);
-			$query->select('t.id')
+			$query->select('t.id, t.title')
 				->from('#__tags AS t')
 				->innerJoin('#__contentitem_tag_map AS m ON t.id = m.tag_id')
 				->where("m.type_alias = 'com_content.article'")
 				->where('content_item_id = ' . $this->_article->id)
 				->order('t.title ASC');
 			$db->setQuery($query);
-			$this->_article->tags = $db->loadColumn();
+			$this->_article->tags = $db->loadObjectList();
 
 			return true;
 		}
@@ -386,7 +386,15 @@ class FJRelatedModelFJRelated extends JModelList
 				->join('LEFT', '#__content_rating AS v ON a.id = v.content_id');
 		}
 
-		$tags = $this->_article->tags;
+		$tags = array();
+		$tagNames = array();
+		foreach ($this->_article->tags as $object)
+		{
+			$tags[] = $object->id;
+			$tagNames[$object->id] = $object->title;
+		}
+		$this->_article->tagIds = $tags;
+		$this->_article->tagNames = $tagNames;
 
 		$thisAlias = trim($this->_article->created_by_alias);
 		$thisAuthor = $this->_article->created_by;
@@ -479,8 +487,9 @@ class FJRelatedModelFJRelated extends JModelList
 				->select('CASE WHEN CHAR_LENGTH(a.alias) THEN CONCAT_WS(":", a.id, a.alias) ELSE a.id END as slug')
 				->select('CASE WHEN CHAR_LENGTH(cc.alias) THEN CONCAT_WS(":", cc.id, cc.alias) ELSE cc.id END as catslug')
 				->select('CHAR_LENGTH( a.`fulltext` ) AS readmore, u.name AS author')
-				->select('a.metakey, "0" as match_count, "" as match_list, "" as main_article_keywords')
-				->select('cc.title as category, "article" as link_type, cc.alias as category_alias, parent.id as parent_id, parent.alias as parent_alias');
+				->select('a.metakey, "" as main_article_keywords')
+				->select('cc.title as category, "article" as link_type, cc.alias as category_alias, parent.id as parent_id, parent.alias as parent_alias')
+				->select('m.total_tag_count, m.matching_tag_count AS match_count, m.matching_tags as match_list');
 
 			$query->from('#__content AS a');
 			$query->leftJoin('#__content_frontpage AS f ON f.content_id = a.id');
@@ -494,8 +503,6 @@ class FJRelatedModelFJRelated extends JModelList
 
 		return $query;
 	}
-
-
 
 	protected function _reverseSort ($row1, $row2) // comp
 	{
@@ -718,40 +725,7 @@ class FJRelatedModelFJRelated extends JModelList
 				// count the number of keyword matches (skip if not required based on parameter settings)
 				if (($showMatchList) || ($showCount) || ($orderBy == 'bestmatch'))
 				{
-					if (trim($row->metakey)) {
-						// create array of current article's keyword phrases
-						$rowkeywords = explode(',', trim($row->metakey));
-
-						foreach ($rowkeywords as $keyword ) // loop through each keyword phrase of this related article
-						{
-							foreach ($keys as $nextkey) // loop through each keyword phrase of the main article
-							{
-								if (strtoupper(trim($keyword)) == strtoupper(trim($nextkey))) // test key match (ignore case)
-								{
-									$row->match_count++; // if match, increment counter
-									$matching_keywords[] = trim($keyword); // if match, add this phrase to list of matches
-								}
-							}
-						}
-					}
-
-					// add author or alias to count and list, if applicable
-					if (($matchAuthorAlias) && // check parameter
-					(trim($this->_article->created_by_alias)) && // check that there is an alias
-					(strtoupper(trim($row->created_by_alias)) == strtoupper(trim($this->_article->created_by_alias)))) // check match
-					{
-						$row->match_count++;
-						$matching_keywords[] = trim($row->created_by_alias);
-					}
-					else if (($matchAuthor) && ($row->created_by == $this->_article->created_by)) // otherwise, check authors
-					{
-						$row->match_count++;
-						$matching_keywords[] = trim($row->author);
-					}
-
-					$row->match_list = $matching_keywords; // save all of the matches for the current row
-					$row->main_article_keywords = $keys; // save main article keywords in each row
-					$matching_keywords = array(); // reset the array for the next row
+					$row->main_article_keywords = $this->_article->tagNames; // save main article keywords in each row
 				}
 			}
 			if ($orderBy == 'bestmatch') {

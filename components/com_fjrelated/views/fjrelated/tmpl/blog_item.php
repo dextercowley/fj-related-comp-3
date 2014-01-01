@@ -129,9 +129,14 @@ JHtml::_('behavior.framework');
 <?php endif; ?>
 <?php if ($showMatchList) : ?>
 	<dd class="match_list">
-	<?php $temp_list = $this->item->match_list; ?>
-	<?php natcasesort($temp_list); ?>
-	<?php echo JText::sprintf('COM_FJRELATED_ARTICLE_MATCH_LIST', implode($temp_list, ', '))?>
+	<?php $matchingTagNames = array(); ?>
+	<?php $tagArray = explode(',', $this->item->match_list); ?>
+	<?php foreach ($tagArray as $tagId) : ?>
+	<?php 	$matchingTagNames[] = $this->article->tagNames[$tagId];?>
+	<?php endforeach; ?>
+	<p>
+	<?php echo JText::sprintf('COM_FJRELATED_ARTICLE_MATCH_LIST', implode(', ', $matchingTagNames)); ?>
+	</p>
 	</dd>
 <?php endif; ?>
  </dl>
