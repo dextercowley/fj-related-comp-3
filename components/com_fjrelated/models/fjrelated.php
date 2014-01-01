@@ -220,7 +220,7 @@ class FJRelatedModelFJRelated extends JModelList
 	 * @return	boolean	True on success
 	 * @since	1.5
 	 */
-	function _loadArticle()
+	protected function _loadArticle()
 	{
 		$app = JFactory::getApplication();
 
@@ -249,11 +249,13 @@ class FJRelatedModelFJRelated extends JModelList
 			$this->_db->setQuery($query);
 			$this->_article = $this->_db->loadObject();
 
-			if ( ! $this->_article ) {
+			if ( ! $this->_article )
+			{
 				return false;
 			}
 
-			if($this->_article->publish_down == $this->_db->getNullDate()) {
+			if ($this->_article->publish_down == $this->_db->getNullDate())
+			{
 				$this->_article->publish_down = JText::_('COM_FJRELATED_NEVER');
 			}
 
@@ -266,7 +268,7 @@ class FJRelatedModelFJRelated extends JModelList
 			// Load the tags from the mapping table
 			$db = JFactory::getDbo();
 			$query = $db->getQuery(true);
-			$query->select('t.title')
+			$query->select('t.id')
 				->from('#__tags AS t')
 				->innerJoin('#__contentitem_tag_map AS m ON t.id = m.tag_id')
 				->where("m.type_alias = 'com_content.article'")
@@ -287,7 +289,7 @@ class FJRelatedModelFJRelated extends JModelList
 	 * @return	void
 	 * @since	1.5
 	 */
-	function _loadArticleParams()
+	protected function _loadArticleParams()
 	{
 		$app = JFactory::getApplication();
 
@@ -320,7 +322,7 @@ class FJRelatedModelFJRelated extends JModelList
 	 * @return	string	WHERE clause
 	 * @since	1.5
 	 */
-	function _buildContentWhere()
+	protected function _buildContentWhere()
 	{
 		$app 		= JFactory::getApplication();
 
@@ -334,8 +336,8 @@ class FJRelatedModelFJRelated extends JModelList
 
 		/*
 		 * First thing we need to do is assert that the content article is the one
-		 * we are looking for and we have access to it.
-		 */
+		* we are looking for and we have access to it.
+		*/
 		$where = ' WHERE a.id = '. (int) $this->_id;
 
 		if (!$user->authorise('com_content', 'edit', 'content', 'all'))
@@ -344,8 +346,8 @@ class FJRelatedModelFJRelated extends JModelList
 			$where .= ' ( a.created_by = ' . (int) $user->id . ' ) ';
 			$where .= '   OR ';
 			$where .= ' ( a.state = 1' .
-					' AND ( a.publish_up = '.$this->_db->Quote($nullDate).' OR a.publish_up <= '.$this->_db->Quote($now).' )' .
-					' AND ( a.publish_down = '.$this->_db->Quote($nullDate).' OR a.publish_down >= '.$this->_db->Quote($now).' )';
+				' AND ( a.publish_up = '.$this->_db->Quote($nullDate).' OR a.publish_up <= '.$this->_db->Quote($now).' )' .
+				' AND ( a.publish_down = '.$this->_db->Quote($nullDate).' OR a.publish_down >= '.$this->_db->Quote($now).' )';
 			$where .= '   ) ';
 			$where .= '   OR ';
 			$where .= ' ( a.state = -1 ) ';
@@ -355,17 +357,36 @@ class FJRelatedModelFJRelated extends JModelList
 		return $where;
 	}
 
-	function _buildQuery($state = 1)
+	protected function _buildQuery($state = 1)
 	{
 		$app = JFactory::getApplication();
 		$params = $app->getParams();
 		$user = JFactory::getUser();
 		$userGroups = implode(',', $user->getAuthorisedViewLevels());
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+
+		if (!$user->authorise('core.edit.state', 'com_content') || !$user->authorise('core.edit', 'com_content'))
+		{
+			$nullDate = $db->quote($db->getNullDate());
+			$date = JFactory::getDate();
+
+			$nowDate = $db->quote($date->toSql());
+
+			$query->where('(a.publish_up = ' . $nullDate . ' OR a.publish_up <= ' . $nowDate . ')')
+			->where('(a.publish_down = ' . $nullDate . ' OR a.publish_down >= ' . $nowDate . ')');
+		}
 
 		// If voting is turned on, get voting data as well for the content items
-		$voting	= ContentHelperQuery::buildVotingQuery($params);
+		$voting = $params->get('show_vote');
 
-		$metakey = trim($this->_article->metakey);
+		if ($voting)
+		{
+			$query->select('ROUND(v.rating_sum / v.rating_count, 0) AS rating, v.rating_count as rating_count')
+				->join('LEFT', '#__content_rating AS v ON a.id = v.content_id');
+		}
+
+		$tags = $this->_article->tags;
 
 		$thisAlias = trim($this->_article->created_by_alias);
 		$thisAuthor = $this->_article->created_by;
@@ -374,53 +395,46 @@ class FJRelatedModelFJRelated extends JModelList
 		$noauth	= !$params->get('show_noauth');
 		$anyOrAll = $params->get('anyOrAll', 'any');
 		$publishedState = $params->get('fjArticleState', 1);
+		if (is_array($publishedState))
+		{
+			if (count($publishedState == 1))
+			{
+				$publishedState = $publishedState[0];
+			}
+			else
+			{
+				JArrayHelper::toInteger($publishedState, 'int');
+			}
+		}
 
-		if (($metakey) || 	// do the query if there are keywords
+		if (($tags) || 	// do the query if there are tags
 		($matchAuthor) || 	// or if the author match is on
 		(($matchAuthorAlias) && ($thisAlias)))	// of if the alias match is on and an alias
 		{
-			$db	=$this->getDBO();
-			$user	= JFactory::getUser();
-			$date = JFactory::getDate();
-			$now  = $date->toSql();
-			$nullDate = $db->getNullDate();
-
-			// explode the meta keys on a comma
-			$keys = explode(',', $metakey);
-			$likes = array ();
-
-			// assemble any non-blank word(s)
-			foreach ($keys as $key)
-			{
-				$key = trim($key);
-				if ($key) {
-					// surround with commas so first and last items have surrounding commas
-					$likes[] = ',' . $this->_db->escape($key) . ',';
-				}
-			}
 			$ordering 	= $params->get('ordering', 'alpha');
-			$sqlSort	= $this->_buildContentOrderBy($ordering);
+			$query	= $this->_buildContentOrderBy($ordering, $query);
 
-			// set connector to OR or AND based on parameter
-			$sqlConnector =  ($anyOrAll == 'any') ? ' OR ' : ' AND ';
-
-			if (($likes) && ($anyOrAll != 'exact')) {
-				$keywordSelection = ' CONCAT(",", REPLACE(a.metakey,", ",","),",") LIKE "%'.
-				implode('%"' . $sqlConnector . 'CONCAT(",", REPLACE(a.metakey,", ",","),",") LIKE "%', $likes).'%"';
-			}
-			else if (($likes) && ($anyOrAll == 'exact')) {
-				$keywordSelection = ' UPPER(a.metakey) = "' . strtoupper($metakey) . '" ';
-			}
-			else { // in this case we are only going to match on author or alias, so we put a harmless false selection here
-				$keywordSelection = ' 1 = 2 '; // just as a placeholder (so our AND's and OR's still work)
+			// If tags, we need to do the subquery for the tag table join
+			if ($tags)
+			{
+				$tagQuery = $db->getQuery(true);
+				$tagQuery->from('#__contentitem_tag_map')
+					->select('content_item_id')
+					->select('COUNT(*) AS total_tag_count')
+					->select('SUM(CASE WHEN tag_id IN (' . implode(',', $tags) . ') THEN 1 ELSE 0 END) AS matching_tag_count')
+					->select('GROUP_CONCAT(CASE WHEN tag_id IN (' . implode(',', $tags) . ') THEN tag_id ELSE null END) AS matching_tags')
+					->where('type_alias = \'com_content.article\'')
+					->group('content_item_id');
+				$tagQueryString = '(' . (string) $tagQuery . ')';
+				$query->leftJoin($tagQueryString . ' AS m ON m.content_item_id = a.id');
 			}
 
 			// get published state select
 			if (is_array($publishedState)) {
-				$publishedStateCondition = implode(',', $publishedState);
+				$query->where('a.state IN(' . implode(',', $publishedState) . ')');
 			}
 			else {
-				$publishedStateCondition = $publishedState;
+				$query->where('a.state = ' . $publishedState);
 			}
 
 			// get category selections
@@ -433,74 +447,57 @@ class FJRelatedModelFJRelated extends JModelList
 				$ids = str_replace('C', $this->_article->catid, strtoupper($catid));
 				$ids = explode( ',', $ids);
 				JArrayHelper::toInteger( $ids );
-				$catCondition = ' AND a.catid IN (' . implode(',', $ids ) . ')';
+				$query->where('a.catid IN (' . implode(',', $ids ) . ')');
 			}
 
-			if ($matchAuthor) {
-				$matchAuthorCondition = $sqlConnector . 'a.created_by = ' . $db->Quote($thisAuthor) . ' ';
-			}
-
-			if (($matchAuthorAlias) && ($thisAlias)) {
-				$matchAuthorAliasCondition = $sqlConnector . 'UPPER(a.created_by_alias) = ' . $db->Quote(strtoupper($thisAlias)) . ' ';
-			}
-			else {
-				$matchAuthorAliasCondition = ' ';
-			}
-
-			if ($noauth) {
-				$noauthCondition = ' AND a.access IN (' . $userGroups . ')' .
-                                   ' AND cc.access IN (' . $userGroups . ')' .
-                                   ' AND cc.published = 1 ';
-			}
-
-			if ($params->get('filter_type') != 'none')
+			if ($matchAuthor)
 			{
-				$filterWhere = $this->_getFilterWhere($params->get('filter_type'));
-			}
-			else {
-				$filterWhere = '';
+				$query->where('a.created_by = ' . $db->quote($thisAuthor));
 			}
 
-			// select other items based on the metakey field 'like' the keys found
-			$query = 'SELECT a.id, a.title, a.alias, a.introtext, a.fulltext, DATE_FORMAT(a.created, "%Y-%m-%d") AS created, a.state, a.catid, a.hits,' .
-							' a.created, a.created_by, a.created_by_alias, a.modified, a.modified_by,' .
-							' a.checked_out, a.checked_out_time, a.publish_up, a.publish_down, a.attribs, a.hits, a.images, a.urls, a.ordering, a.metakey, a.metadesc, a.access,' .
-							' cc.access AS cat_access, cc.published AS cat_state, ' .
-							' CASE WHEN CHAR_LENGTH(a.alias) THEN CONCAT_WS(":", a.id, a.alias) ELSE a.id END as slug,'.
-							' CASE WHEN CHAR_LENGTH(cc.alias) THEN CONCAT_WS(":", cc.id, cc.alias) ELSE cc.id END as catslug,'.
-							' CHAR_LENGTH( a.`fulltext` ) AS readmore, u.name AS author ' . $voting['select'] . ', ' .
-							' a.metakey, "0" as match_count, "" as match_list, "" as main_article_keywords, '. // add new columns to query for counting keyword matches
-							' cc.title as category, "article" as link_type, cc.alias as category_alias, parent.id as parent_id, parent.alias as parent_alias' .
-							' FROM #__content AS a' .
-							' LEFT JOIN #__content_frontpage AS f ON f.content_id = a.id' .
-							' LEFT JOIN #__categories AS cc ON cc.id = a.catid' .
-							' LEFT JOIN #__users AS u ON u.id = a.created_by' .
-							' LEFT JOIN #__categories AS parent on parent.id = cc.parent_id' .
-			$voting['join'].
-							' WHERE a.id != '.(int) $this->_id .
-							' AND a.state IN (' . $publishedStateCondition . ') ' .
-			($noauth ? $noauthCondition : '') .
-							' AND ( ' .
-			$keywordSelection .
-			($matchAuthor ? $matchAuthorCondition : '' ) . // author match part of OR clause
-			($matchAuthorAlias ? $matchAuthorAliasCondition : '') . // author alias part of OR clause
-							' )' .
-							' AND ( a.publish_up = '.$db->Quote($nullDate).' OR a.publish_up <= '.$db->Quote($now).' )' .
-							' AND ( a.publish_down = '.$db->Quote($nullDate).' OR a.publish_down >= '.$db->Quote($now).' ) ' .
-			($catCondition ? $catCondition : '') .  // add category selection, if any
-			$filterWhere . // add filter selection
-			$sqlSort; // sort the query
+			if (($matchAuthorAlias) && ($thisAlias))
+			{
+				$query->where('UPPER(a.created_by_alias) = ' . $db->Quote(strtoupper($thisAlias)));
+			}
+
+			if ($noauth)
+			{
+				$query->where('a.access IN (' . $userGroups . ')')
+					->where('cc.access IN (' . $userGroups . ')')
+					->where('cc.published = 1');
+			}
+
+			if ($params->get('filter_type') && $params->get('filter_type') != 'none')
+			{
+				$query->where($this->_getFilterWhere($params->get('filter_type')));
+			}
+
+			$query->select('a.id, a.title, a.alias, a.introtext, a.fulltext, DATE_FORMAT(a.created, "%Y-%m-%d") AS created, a.state, a.catid, a.hits')
+				->select('a.created, a.created_by, a.created_by_alias, a.modified, a.modified_by')
+				->select('a.checked_out, a.checked_out_time, a.publish_up, a.publish_down, a.attribs, a.hits, a.images, a.urls, a.ordering, a.metakey, a.metadesc, a.access')
+				->select('cc.access AS cat_access, cc.published AS cat_state')
+				->select('CASE WHEN CHAR_LENGTH(a.alias) THEN CONCAT_WS(":", a.id, a.alias) ELSE a.id END as slug')
+				->select('CASE WHEN CHAR_LENGTH(cc.alias) THEN CONCAT_WS(":", cc.id, cc.alias) ELSE cc.id END as catslug')
+				->select('CHAR_LENGTH( a.`fulltext` ) AS readmore, u.name AS author')
+				->select('a.metakey, "0" as match_count, "" as match_list, "" as main_article_keywords')
+				->select('cc.title as category, "article" as link_type, cc.alias as category_alias, parent.id as parent_id, parent.alias as parent_alias');
+
+			$query->from('#__content AS a');
+			$query->leftJoin('#__content_frontpage AS f ON f.content_id = a.id');
+			$query->leftJoin('#__categories AS cc ON cc.id = a.catid');
+			$query->leftJoin('#__users AS u ON u.id = a.created_by');
+			$query->leftJoin('#__categories AS parent on parent.id = cc.parent_id');
+
+			$query->where('a.id != '.(int) $this->_id);
+
 		}
-		else
-		{
-			$query = '';
-		}
+
 		return $query;
 	}
 
 
 
-	function _reverseSort ($row1, $row2) // comp
+	protected function _reverseSort ($row1, $row2) // comp
 	{
 		if ($row1->match_count == $row2->match_count) // sort by title within match_count (if same # matches)
 		{
@@ -513,7 +510,7 @@ class FJRelatedModelFJRelated extends JModelList
 		return $result;
 	}
 
-	function _normalSort ($row1, $row2) // comp
+	protected function _normalSort ($row1, $row2) // comp
 	{
 		if ($row1->match_count == $row2->match_count) // sort by title within match_count (if same # matches)
 		{
@@ -531,50 +528,50 @@ class FJRelatedModelFJRelated extends JModelList
 	 * @param $orderby
 	 * @return unknown_type
 	 */
-	function _buildContentOrderBy($defaultOrder)
+	protected function _buildContentOrderBy($defaultOrder, $query)
 	{
 		$app = JFactory::getApplication();
 		$itemid = $app->input->getUInt('Itemid',0);
 		$filter_order  = $app->getUserStateFromRequest('com_fjrelated.list.:' . $itemid . '.filter_order', 'filter_order', '', 'string');
 		$filter_order_Dir = $app->getUserStateFromRequest('com_fjrelated.list.:' . $itemid . '.filter_order_Dir', 'filter_order_Dir', '', 'cmd');
 
-		$orderBy = ' ORDER BY ';
 		if ($filter_order && $filter_order_Dir)
 		{
-			$orderBy .= $filter_order .' '. $filter_order_Dir;
+			$query->order($filter_order . ' ' . $filter_order_Dir);
 		}
 
 		if (($filter_order == 'author') && $filter_order_Dir)
 		{
-			$orderBy = ' ORDER BY CASE WHEN CHAR_LENGTH(a.created_by_alias) THEN a.created_by_alias ELSE u.name END '. $filter_order_Dir;
+			$query->order('CASE WHEN CHAR_LENGTH(a.created_by_alias) THEN a.created_by_alias ELSE u.name END '. $filter_order_Dir);
 		}
 
 		if (!($filter_order && $filter_order_Dir)) {
 			switch ($defaultOrder)
 			{
 				case 'alpha' :
-					$orderBy .= 'a.title ';
+					$query->order('a.title');
 					break;
 
 				case 'rdate' :
-					$orderBy .= 'a.created desc, a.title ';
+					$query->order('a.created desc, a.title');
 					break;
 
 				case 'date' :
-					$orderBy .= 'a.created, a.title ';
+					$query->order('a.created, a.title');
 					break;
 
 				case 'article_order' :
-					$orderBy .= 'cc.title, a.ordering ' ;
+					$query->order('cc.title, a.ordering');
 					break;
 
 				default:
-					$orderBy .= 'a.title ';
+					$query->order('a.title');
 			}
 		}
 
-		return $orderBy;
+		return $query;
 	}
+
 	/**
 	 * Method to load content item data for related items if they don't
 	 * exist.
@@ -582,7 +579,7 @@ class FJRelatedModelFJRelated extends JModelList
 	 * @access	private
 	 * @return	boolean	True on success
 	 */
-	function _loadData($state = 1)
+	protected function _loadData($state = 1)
 	{
 		$app = JFactory::getApplication();
 		if (empty($this->_article)) {
@@ -602,7 +599,8 @@ class FJRelatedModelFJRelated extends JModelList
 		}
 		return true;
 	}
-	function _getFJRelatedList($query, $limitstart, $limit)
+
+	protected function _getFJRelatedList($query, $limitstart, $limit)
 	{
 		// Override because we have to allow
 		// for the possibility of processing after the query to count
@@ -632,17 +630,9 @@ class FJRelatedModelFJRelated extends JModelList
 
 
 		$metakey = trim($this->_article->metakey);
-		$keys = explode(',', $metakey);
+		$tags = explode(',', $metakey);
 
-		// if not sorting by best match, we can limit the sql query to the count parameter
-		if (($orderBy != 'bestmatch') && ($filter_order!='match_count') && ($limit))
-		{
-			$db->setQuery($query, $limitstart, $limit);
-		}
-		else
-		{
-			$db->setQuery($query); // can't use $showLimit until we sort by bestmatch
-		}
+		$db->setQuery($query, $limitstart, $limit);
 		$temp = $db->loadObjectList();
 		$related = array();
 		if (count($temp)) // we have at least one related article
@@ -800,7 +790,7 @@ class FJRelatedModelFJRelated extends JModelList
 	 * @access private
 	 * @return string value of where clause for filter
 	 */
-	function _getFilterWhere($filterType)
+	protected function _getFilterWhere($filterType)
 	{
 		$filter = JFactory::getApplication()->input->getString('filter-search', '');
 
@@ -810,7 +800,7 @@ class FJRelatedModelFJRelated extends JModelList
 			// clean filter variable
 			$filter = JString::strtoupper($filter);
 			$hitsFilter = intval($filter);
-			$filter	= $this->_db->Quote( '%'.$this->_db->escape( $filter, true ).'%', false );
+			$filter	= $this->_db->quote( '%'.$this->_db->escape( $filter, true ).'%', false );
 
 			switch ($filterType)
 			{
