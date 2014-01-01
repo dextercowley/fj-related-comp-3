@@ -174,7 +174,18 @@ class FJRelatedModelFJRelated extends JModelList
 			$article->text			= '';
 			$app = JFactory::getApplication();
 			$params = $app->getParams();
-			$article->tags = $params->get('tags');
+			// Get tag titles from query
+			if (is_array($params->get('tags')) && count($params->get('tags')) > 0)
+			{
+				$query = JFactory::getDbo()->getQuery(true);
+				$query->select('id, title')
+					->from('#__tags')
+					->where('id IN (' . implode(',', $params->get('tags')) . ')')
+					->order('title ASC');
+				JFactory::getDbo()->setQuery($query);
+				$article->tags = JFactory::getDbo()->loadObjectList();
+			}
+
 			$this->_article	= $article;
 		}
 
@@ -477,7 +488,10 @@ class FJRelatedModelFJRelated extends JModelList
 
 			if ($params->get('filter_type') && $params->get('filter_type') != 'none')
 			{
-				$query->where($this->_getFilterWhere($params->get('filter_type')));
+				if ($filter = $this->_getFilterWhere($params->get('filter_type')))
+				{
+					$query->where($filter);
+				}
 			}
 
 			$query->select('a.id, a.title, a.alias, a.introtext, a.fulltext, DATE_FORMAT(a.created, "%Y-%m-%d") AS created, a.state, a.catid, a.hits')
@@ -779,15 +793,15 @@ class FJRelatedModelFJRelated extends JModelList
 			switch ($filterType)
 			{
 				case 'title' :
-					$filterWhere = ' AND UPPER( a.title ) LIKE '.$filter;
+					$filterWhere = 'UPPER( a.title ) LIKE ' . $filter;
 					break;
 
 				case 'author' :
-					$filterWhere = ' AND ((CASE WHEN a.created_by_alias > \' \' THEN a.created_by_alias ELSE u.name END) LIKE '.$filter.' ) ';
+					$filterWhere = '((CASE WHEN a.created_by_alias > \' \' THEN a.created_by_alias ELSE u.name END) LIKE '.$filter.' )';
 					break;
 
 				case 'hits' :
-					$filterWhere = ' AND a.hits >= '.$hitsFilter. ' ';
+					$filterWhere = 'a.hits >= '.$hitsFilter;
 					break;
 			}
 		}
