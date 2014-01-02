@@ -412,7 +412,22 @@ class FJRelatedModelFJRelated extends JModelList
 		$matchAuthor = trim($params->get('matchAuthor', 0));
 		$matchAuthorAlias = trim($params->get('matchAuthorAlias', 0));
 		$noauth	= !$params->get('show_noauth');
+
 		$anyOrAll = $params->get('anyOrAll', 'any');
+		$count = count($this->_article->tags);
+		switch ($anyOrAll)
+		{
+			case 'all':
+				$query->where('m.matching_tag_count = ' . $count);
+				break;
+			case 'exact':
+				$query->where('m.matching_tag_count = ' . $count)
+					->where('m.matching_tag_count = m.total_tag_count');
+				break;
+			default:
+				$query->where('m.matching_tag_count > 0');
+		}
+
 		$publishedState = $params->get('fjArticleState', 1);
 		if (is_array($publishedState))
 		{
@@ -655,7 +670,6 @@ class FJRelatedModelFJRelated extends JModelList
 
 		$db->setQuery($query, $limitstart, $limit);
 		$temp = $db->loadObjectList();
-		$related = array();
 		if (count($temp)) // we have at least one related article
 		{
 
@@ -741,35 +755,16 @@ class FJRelatedModelFJRelated extends JModelList
 				{
 					$row->main_article_keywords = $this->_article->tagNames; // save main article keywords in each row
 				}
-			}
-			if ($orderBy == 'bestmatch') {
-				$ii = $limitstart;
-			}
-			else {
-				$ii = 0;
-			}
-			if (($orderBy == 'bestmatch' && (!$filter_order)) || (($filter_order=='match_count') && ($filter_order_Dir=='desc'))) // need to sort now that we have the count of keyword matches
-			{
-				usort($temp, array('FJRelatedModelFJRelated', '_reverseSort'));
-				$ii = $limitstart; // we have retrieved all related articles and need to select desired range manually
-			}
-			else if (($filter_order=='match_count') && ($filter_order_Dir=='asc'))
-			{
-				usort($temp, array('FJRelatedModelFJRelated', '_normalSort'));
-				$ii = $limitstart; // we have retrieved all related articles and need to select desired range manually
-			}
-			if (!$limit) $limit = count($temp); // loop through all if All selected
-			for ($i=$ii; $i < min($limit + $limitstart, count($temp)); $i++)
-			{
-				$row = $temp[$i];
-				if (true || ($row->cat_state == 1 || $row->cat_state == '') && ($row->cat_access <= $user->get('aid', 0) || $row->cat_access == ''))
+
+				if (($row->cat_state == 1 || $row->cat_state == '') && ($row->cat_access <= $user->get('aid', 0) || $row->cat_access == ''))
 				{
 					$row->route = JRoute::_(ContentHelperRoute::getArticleRoute($row->slug, $row->catslug));
-					$related[] = $row;
 				}
+				$related[] = $row;
 			}
+
 		}
-		unset ($temp);
+
 		return $related;
 	}
 
@@ -807,6 +802,7 @@ class FJRelatedModelFJRelated extends JModelList
 		}
 		return $filterWhere;
 	}
+
 	/**
 	 * Check to see if this is an FJ Related Intro Article
 	 * If it is, return the link to the FJ Related Layout

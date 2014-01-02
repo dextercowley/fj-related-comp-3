@@ -132,11 +132,9 @@ JHtml::_('behavior.framework');
 	<?php $matchingTagNames = array(); ?>
 	<?php $tagArray = explode(',', $this->item->match_list); ?>
 	<?php foreach ($tagArray as $tagId) : ?>
-	<?php 	$matchingTagNames[] = $this->article->tagNames[$tagId];?>
+		<?php 	$matchingTagNames[] = $this->article->tagNames[$tagId];?>
 	<?php endforeach; ?>
-	<p>
 	<?php echo JText::sprintf('COM_FJRELATED_ARTICLE_MATCH_LIST', implode(', ', $matchingTagNames)); ?>
-	</p>
 	</dd>
 <?php endif; ?>
  </dl>
