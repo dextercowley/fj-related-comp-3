@@ -600,6 +600,10 @@ class FJRelatedModelFJRelated extends JModelList
 					$query->order('cc.title, a.ordering');
 					break;
 
+				case 'bestmatch' :
+					$query->order('match_count DESC');
+					break;
+
 				default:
 					$query->order('a.title');
 			}
