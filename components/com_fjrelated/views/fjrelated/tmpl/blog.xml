@@ -19,7 +19,6 @@
 				label="COM_FJRELATED_FIELD_TAG_LABEL"
 				description="COM_FJRELATED_FIELD_TAG_DESC"
 				custom="deny"
-				required="true"
 				multiple="true"
 			/>
 
