@@ -550,31 +550,6 @@ class FJRelatedModelFJRelated extends JModelList
 		}
 	}
 
-	protected function _reverseSort ($row1, $row2) // comp
-	{
-		if ($row1->match_count == $row2->match_count) // sort by title within match_count (if same # matches)
-		{
-			$result = strcmp ($row1->title, $row2->title);
-		}
-		else
-		{
-			$result = - strcmp ($row1->match_count, $row2->match_count); // otherwise, sort by reverse match_count
-		}
-		return $result;
-	}
-
-	protected function _normalSort ($row1, $row2) // comp
-	{
-		if ($row1->match_count == $row2->match_count) // sort by title within match_count (if same # matches)
-		{
-			$result = strcmp ($row1->title, $row2->title);
-		}
-		else
-		{
-			$result = strcmp ($row1->match_count, $row2->match_count); // otherwise, sort by reverse match_count
-		}
-		return $result;
-	}
 	/**
 	 * Creates the ORDER BY clause of the query
 	 * There are two cases: (1) The initial query and (2) sorting by a column header
@@ -595,6 +570,7 @@ class FJRelatedModelFJRelated extends JModelList
 
 		if (($filter_order == 'author') && $filter_order_Dir)
 		{
+			$query->clear('order');
 			$query->order('CASE WHEN CHAR_LENGTH(a.created_by_alias) THEN a.created_by_alias ELSE u.name END '. $filter_order_Dir);
 		}
 

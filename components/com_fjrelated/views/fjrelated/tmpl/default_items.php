@@ -149,6 +149,7 @@ $filter 	= JFactory::getApplication()->input->getString('filter-search', '');
 						<?php foreach ($tagArray as $tagId) : ?>
 							<?php $matchingTagNames[] = $this->article->tagNames[$tagId];?>
 						<?php endforeach; ?>
+						<?php sort($matchingTagNames); ?>
 						<?php echo implode(', ', $matchingTagNames); ?>
 					<?php endif; ?>
 					</td>
