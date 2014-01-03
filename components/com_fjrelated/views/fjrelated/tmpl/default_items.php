@@ -140,16 +140,19 @@ $filter 	= JFactory::getApplication()->input->getString('filter-search', '');
 						<?php echo $article->match_count; ?>
 					</td>
 				<?php endif; ?>
-					<?php if ($this->params->get('showMatchList', 0)) : ?>
-						<td class="list-match-list">
-								<?php $matchingTagNames = array(); ?>
-								<?php $tagArray = explode(',', $article->match_list); ?>
-								<?php foreach ($tagArray as $tagId) : ?>
-									<?php $matchingTagNames[] = $this->article->tagNames[$tagId];?>
-								<?php endforeach; ?>
-								<?php echo JText::sprintf('COM_FJRELATED_ARTICLE_MATCH_LIST', implode(', ', $matchingTagNames)); ?>
-						</td>
+
+				<?php if ($this->params->get('showMatchList', 0)) : ?>
+					<td class="list-match-list">
+					<?php if (isset($article->match_list)) : ?>
+						<?php $matchingTagNames = array(); ?>
+						<?php $tagArray = explode(',', $article->match_list); ?>
+						<?php foreach ($tagArray as $tagId) : ?>
+							<?php $matchingTagNames[] = $this->article->tagNames[$tagId];?>
+						<?php endforeach; ?>
+						<?php echo implode(', ', $matchingTagNames); ?>
 					<?php endif; ?>
+					</td>
+				<?php endif; ?>
 					<?php if ($this->params->get('list_show_date')) : ?>
 					<td class="list-date">
 						<?php echo JHtml::_('date',$article->displayDate, $this->escape(
