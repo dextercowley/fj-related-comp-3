@@ -185,6 +185,10 @@ class FJRelatedModelFJRelated extends JModelList
 				JFactory::getDbo()->setQuery($query);
 				$article->tags = JFactory::getDbo()->loadObjectList();
 			}
+			else
+			{
+				$article->tags = array();
+			}
 
 			$this->_article	= $article;
 		}
@@ -374,35 +378,16 @@ class FJRelatedModelFJRelated extends JModelList
 		$params = $app->getParams();
 		$user = JFactory::getUser();
 		$userGroups = implode(',', $user->getAuthorisedViewLevels());
-		$db = JFactory::getDbo();
-		$query = $db->getQuery(true);
-
-		if (!$user->authorise('core.edit.state', 'com_content') || !$user->authorise('core.edit', 'com_content'))
-		{
-			$nullDate = $db->quote($db->getNullDate());
-			$date = JFactory::getDate();
-
-			$nowDate = $db->quote($date->toSql());
-
-			$query->where('(a.publish_up = ' . $nullDate . ' OR a.publish_up <= ' . $nowDate . ')')
-			->where('(a.publish_down = ' . $nullDate . ' OR a.publish_down >= ' . $nowDate . ')');
-		}
-
-		// If voting is turned on, get voting data as well for the content items
-		$voting = $params->get('show_vote');
-
-		if ($voting)
-		{
-			$query->select('ROUND(v.rating_sum / v.rating_count, 0) AS rating, v.rating_count as rating_count')
-				->join('LEFT', '#__content_rating AS v ON a.id = v.content_id');
-		}
 
 		$tags = array();
 		$tagNames = array();
-		foreach ($this->_article->tags as $object)
+		if (isset($this->_article->tags))
 		{
-			$tags[] = $object->id;
-			$tagNames[$object->id] = $object->title;
+			foreach ($this->_article->tags as $object)
+			{
+				$tags[] = $object->id;
+				$tagNames[$object->id] = $object->title;
+			}
 		}
 		$this->_article->tagIds = $tags;
 		$this->_article->tagNames = $tagNames;
@@ -415,18 +400,7 @@ class FJRelatedModelFJRelated extends JModelList
 
 		$anyOrAll = $params->get('anyOrAll', 'any');
 		$count = count($this->_article->tags);
-		switch ($anyOrAll)
-		{
-			case 'all':
-				$query->where('m.matching_tag_count = ' . $count);
-				break;
-			case 'exact':
-				$query->where('m.matching_tag_count = ' . $count)
-					->where('m.matching_tag_count = m.total_tag_count');
-				break;
-			default:
-				$query->where('m.matching_tag_count > 0');
-		}
+		$selectQuery = JFactory::getDbo()->getQuery(true);
 
 		$publishedState = $params->get('fjArticleState', 1);
 		if (is_array($publishedState))
@@ -445,6 +419,28 @@ class FJRelatedModelFJRelated extends JModelList
 		($matchAuthor) || 	// or if the author match is on
 		(($matchAuthorAlias) && ($thisAlias)))	// of if the alias match is on and an alias
 		{
+			$db = JFactory::getDbo();
+			$query = $db->getQuery(true);
+
+			if (!$user->authorise('core.edit.state', 'com_content') || !$user->authorise('core.edit', 'com_content'))
+			{
+				$nullDate = $db->quote($db->getNullDate());
+				$date = JFactory::getDate();
+
+				$nowDate = $db->quote($date->toSql());
+
+				$query->where('(a.publish_up = ' . $nullDate . ' OR a.publish_up <= ' . $nowDate . ')')
+				->where('(a.publish_down = ' . $nullDate . ' OR a.publish_down >= ' . $nowDate . ')');
+			}
+
+			// If voting is turned on, get voting data as well for the content items
+			$voting = $params->get('show_vote');
+
+			if ($voting)
+			{
+				$query->select('ROUND(v.rating_sum / v.rating_count, 0) AS rating, v.rating_count as rating_count')
+				->join('LEFT', '#__content_rating AS v ON a.id = v.content_id');
+			}
 			$ordering 	= $params->get('ordering', 'alpha');
 			$query	= $this->_buildContentOrderBy($ordering, $query);
 
@@ -459,9 +455,39 @@ class FJRelatedModelFJRelated extends JModelList
 					->select('GROUP_CONCAT(CASE WHEN tag_id IN (' . implode(',', $tags) . ') THEN tag_id ELSE null END) AS matching_tags')
 					->where('type_alias = \'com_content.article\'')
 					->group('content_item_id');
-				$tagQueryString = '(' . (string) $tagQuery . ')';
+				$tagQueryString = '(' . trim((string) $tagQuery) . ')';
 				$query->leftJoin($tagQueryString . ' AS m ON m.content_item_id = a.id');
+				$query->select('m.total_tag_count, m.matching_tag_count AS match_count, m.matching_tags as match_list');
+
+				switch ($anyOrAll)
+				{
+					case 'all':
+						$selectQuery->where('m.matching_tag_count = ' . $count, 'OR');
+						break;
+					case 'exact':
+						$selectQuery->where('m.matching_tag_count = ' . $count, 'OR')
+						->where('m.matching_tag_count = m.total_tag_count', 'OR');
+						break;
+					default:
+						$selectQuery->where('m.matching_tag_count > 0', 'OR');
+				}
 			}
+			else
+			{
+				$query->select('0 AS total_tag_count, 0 AS match_count, \'\' AS match_list');
+			}
+
+			if ($matchAuthor)
+			{
+				$selectQuery->where('a.created_by = ' . $db->quote($thisAuthor), 'OR');
+			}
+
+			if (($matchAuthorAlias) && ($thisAlias))
+			{
+				$selectQuery->where('UPPER(a.created_by_alias) = ' . $db->Quote(strtoupper($thisAlias)), 'OR');
+			}
+
+			$query->where('(' . substr((string) $selectQuery->where, 8) . ')');
 
 			// get published state select
 			if (is_array($publishedState)) {
@@ -482,16 +508,6 @@ class FJRelatedModelFJRelated extends JModelList
 				$ids = explode( ',', $ids);
 				JArrayHelper::toInteger( $ids );
 				$query->where('a.catid IN (' . implode(',', $ids ) . ')');
-			}
-
-			if ($matchAuthor)
-			{
-				$query->where('a.created_by = ' . $db->quote($thisAuthor));
-			}
-
-			if (($matchAuthorAlias) && ($thisAlias))
-			{
-				$query->where('UPPER(a.created_by_alias) = ' . $db->Quote(strtoupper($thisAlias)));
 			}
 
 			if ($noauth)
@@ -517,8 +533,7 @@ class FJRelatedModelFJRelated extends JModelList
 				->select('CASE WHEN CHAR_LENGTH(cc.alias) THEN CONCAT_WS(":", cc.id, cc.alias) ELSE cc.id END as catslug')
 				->select('CHAR_LENGTH( a.`fulltext` ) AS readmore, u.name AS author')
 				->select('a.metakey, "" as main_article_keywords')
-				->select('cc.title as category, "article" as link_type, cc.alias as category_alias, parent.id as parent_id, parent.alias as parent_alias')
-				->select('m.total_tag_count, m.matching_tag_count AS match_count, m.matching_tags as match_list');
+				->select('cc.title as category, "article" as link_type, cc.alias as category_alias, parent.id as parent_id, parent.alias as parent_alias');
 
 			$query->from('#__content AS a');
 			$query->leftJoin('#__content_frontpage AS f ON f.content_id = a.id');
@@ -527,10 +542,12 @@ class FJRelatedModelFJRelated extends JModelList
 			$query->leftJoin('#__categories AS parent on parent.id = cc.parent_id');
 
 			$query->where('a.id != '.(int) $this->_id);
-
+			return $query;
 		}
-
-		return $query;
+		else
+		{
+			return false;
+		}
 	}
 
 	protected function _reverseSort ($row1, $row2) // comp
@@ -686,7 +703,7 @@ class FJRelatedModelFJRelated extends JModelList
 				// Compute the asset access permissions.
 				// Technically guest could edit an article, but lets not check that to improve performance a little.
 				if (!$user->get('guest')) {
-					$asset	= 'com_content.article.'.$row->id;
+					$asset	= 'com_content.article.' . $row->id;
 
 					// Check general edit permission first.
 					if ($user->authorise('core.edit', $asset)) {
