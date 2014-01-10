@@ -465,8 +465,7 @@ class FJRelatedModelFJRelated extends JModelList
 						$selectQuery->where('m.matching_tag_count = ' . $count, 'OR');
 						break;
 					case 'exact':
-						$selectQuery->where('m.matching_tag_count = ' . $count, 'OR')
-						->where('m.matching_tag_count = m.total_tag_count', 'OR');
+						$selectQuery->where('(m.matching_tag_count = ' . $count . ' AND m.matching_tag_count = m.total_tag_count)', 'OR');
 						break;
 					default:
 						$selectQuery->where('m.matching_tag_count > 0', 'OR');

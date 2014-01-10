@@ -130,7 +130,7 @@ JHtml::_('behavior.framework');
 <?php if ($showMatchList) : ?>
 	<dd class="match_list">
 	<?php $matchingTagNames = array(); ?>
-	<?php $tagArray = explode(',', $this->item->match_list); ?>
+	<?php $tagArray = $this->item->match_list ? explode(',', $this->item->match_list) : array(); ?>
 	<?php foreach ($tagArray as $tagId) : ?>
 		<?php 	$matchingTagNames[] = $this->article->tagNames[$tagId];?>
 	<?php endforeach; ?>

@@ -26,12 +26,13 @@
 		<fieldset name="selection_options" label="COM_FJRELATED_SELECTION_OPTIONS">
 			<field name="layout_type" type="hidden" default="blog"
 			/>
-			<field name="anyOrAll" type="radio" default="any"
+			<field name="anyOrAll" type="list" default="any"
 				label = "COM_FJRELATED_MATCH_ANY_ALL" 
 				description="COM_FJRELATED_ANYORALL"
 				class="btn-group btn-group-yesno">
 				<option value="any">COM_FJRELATED_Any</option>
 				<option value="all">JAll</option>
+				<option value="exact">COM_FJRELATED_Exact</option>
 			</field>
 			<field name="matchAuthor" type="radio" default="0"
 				label="COM_FJRELATED_Match_on_Author" 
