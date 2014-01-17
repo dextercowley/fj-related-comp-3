@@ -393,9 +393,9 @@ class FJRelatedModelFJRelated extends JModelList
 		$this->_article->tagNames = $tagNames;
 
 		$thisAlias = trim($this->_article->created_by_alias);
-		$thisAuthor = $this->_article->created_by;
-		$matchAuthor = trim($params->get('matchAuthor', 0));
-		$matchAuthorAlias = trim($params->get('matchAuthorAlias', 0));
+		$thisAuthor = (int) $this->_article->created_by;
+		$matchAuthor = $params->get('matchAuthor', 0);
+		$matchAuthorAlias = $params->get('matchAuthorAlias', 0);
 		$noauth	= !$params->get('show_noauth');
 
 		$anyOrAll = $params->get('anyOrAll', 'any');
@@ -416,8 +416,8 @@ class FJRelatedModelFJRelated extends JModelList
 		}
 
 		if (($tags) || 	// do the query if there are tags
-		($matchAuthor) || 	// or if the author match is on
-		(($matchAuthorAlias) && ($thisAlias)))	// of if the alias match is on and an alias
+			($matchAuthor) || 	// or if the author match is on
+			(($matchAuthorAlias) && ($thisAlias)))	// of if the alias match is on and an alias
 		{
 			$db = JFactory::getDbo();
 			$query = $db->getQuery(true);
@@ -476,16 +476,22 @@ class FJRelatedModelFJRelated extends JModelList
 				$query->select('0 AS total_tag_count, 0 AS match_count, \'\' AS match_list');
 			}
 
+			// Calculate total matches, including tags, author, and author alias
+			$totalMatches = '(CASE WHEN m.matching_tag_count IS NULL THEN 0 ELSE m.matching_tag_count END) ';
+
 			if ($matchAuthor)
 			{
-				$selectQuery->where('a.created_by = ' . $db->quote($thisAuthor), 'OR');
+				$selectQuery->where('a.created_by = ' . $thisAuthor, 'OR');
+				$totalMatches .= ' + (CASE WHEN a.created_by = ' . $thisAuthor . ' THEN 1 ELSE 0 END)';
 			}
 
 			if (($matchAuthorAlias) && ($thisAlias))
 			{
-				$selectQuery->where('UPPER(a.created_by_alias) = ' . $db->Quote(strtoupper($thisAlias)), 'OR');
+				$selectQuery->where('UPPER(a.created_by_alias) = ' . $db->quote(strtoupper($thisAlias)), 'OR');
+				$totalMatches .= ' + (CASE WHEN UPPER(a.created_by_alias) = ' . $db->quote($thisAlias) . ' THEN 1 ELSE 0 END)';
 			}
 
+			// Plug in the WHERE clause of $selectQuery inside ()
 			$query->where('(' . substr((string) $selectQuery->where, 8) . ')');
 
 			// get published state select
@@ -507,6 +513,7 @@ class FJRelatedModelFJRelated extends JModelList
 				$ids = explode( ',', $ids);
 				JArrayHelper::toInteger( $ids );
 				$query->where('a.catid IN (' . implode(',', $ids ) . ')');
+				$totalMatches .= ' + (CASE WHEN a.catid IN (' . implode(',', $ids ) . ')' . ' THEN 1 ELSE 0 END)';
 			}
 
 			if ($noauth)
@@ -524,6 +531,7 @@ class FJRelatedModelFJRelated extends JModelList
 				}
 			}
 
+			$query->select($totalMatches . ' AS total_matches');
 			$query->select('a.id, a.title, a.alias, a.introtext, a.fulltext, DATE_FORMAT(a.created, "%Y-%m-%d") AS created, a.state, a.catid, a.hits')
 				->select('a.created, a.created_by, a.created_by_alias, a.modified, a.modified_by')
 				->select('a.checked_out, a.checked_out_time, a.publish_up, a.publish_down, a.attribs, a.hits, a.images, a.urls, a.ordering, a.metakey, a.metadesc, a.access')
@@ -531,7 +539,7 @@ class FJRelatedModelFJRelated extends JModelList
 				->select('CASE WHEN CHAR_LENGTH(a.alias) THEN CONCAT_WS(":", a.id, a.alias) ELSE a.id END as slug')
 				->select('CASE WHEN CHAR_LENGTH(cc.alias) THEN CONCAT_WS(":", cc.id, cc.alias) ELSE cc.id END as catslug')
 				->select('CHAR_LENGTH( a.`fulltext` ) AS readmore, u.name AS author')
-				->select('a.metakey, "" as main_article_keywords')
+				->select('a.metakey')
 				->select('cc.title as category, "article" as link_type, cc.alias as category_alias, parent.id as parent_id, parent.alias as parent_alias');
 
 			$query->from('#__content AS a');
@@ -589,15 +597,15 @@ class FJRelatedModelFJRelated extends JModelList
 					break;
 
 				case 'article_order' :
-					$query->order('cc.title, a.ordering');
+					$query->order('cc.title ASC, a.ordering ASC');
 					break;
 
 				case 'bestmatch' :
-					$query->order('match_count DESC');
+					$query->order('total_matches DESC, a.title ASC');
 					break;
 
 				default:
-					$query->order('a.title');
+					$query->order('a.title ASC');
 			}
 		}
 
@@ -668,7 +676,6 @@ class FJRelatedModelFJRelated extends JModelList
 		$temp = $db->loadObjectList();
 		if (count($temp)) // we have at least one related article
 		{
-
 			foreach ($temp as $row) // loop through each related article
 			{
 				// First, let's set the access parameters
@@ -746,10 +753,10 @@ class FJRelatedModelFJRelated extends JModelList
 					$row->params->merge($articleParams);
 				}
 
-				// count the number of keyword matches (skip if not required based on parameter settings)
-				if (($showMatchList) || ($showCount) || ($orderBy == 'bestmatch'))
+				// add author and alias to match list (skip if not required based on parameter settings)
+				if ($showMatchList)
 				{
-					$row->main_article_keywords = $this->_article->tagNames; // save main article keywords in each row
+					$row->match_list = $this->_getMatchList($row);
 				}
 
 				if (($row->cat_state == 1 || $row->cat_state == '') && ($row->cat_access <= $user->get('aid', 0) || $row->cat_access == ''))
@@ -758,10 +765,38 @@ class FJRelatedModelFJRelated extends JModelList
 				}
 				$related[] = $row;
 			}
-
 		}
-
 		return $related;
+	}
+
+	protected function _getMatchList($row)
+	{
+		$params = JFactory::getApplication()->getParams();
+		// Get list of matching tags
+		if ($params->get('showMatchList', 0))
+		{
+			$tagNameArray = array();
+			$tagArray = isset($row->match_list) ? explode(',', $row->match_list) : array();
+			foreach ($tagArray as $tagId)
+			{
+				$tagNameArray[] = $this->_article->tagNames[$tagId];
+			}
+			$row->match_list = $tagNameArray;
+
+			// Check for author match with main article
+			if ($params->get('matchAuthor', 0) && $row->created_by == $this->_article->created_by)
+			{
+				$row->match_list[] = $this->_article->author;
+			}
+
+			// Check for author alias match with main article
+			if ($params->get('matchAuthorAlias', 0) && $row->created_by_alias > ' ' && strtoupper($row->created_by_alias) == strtoupper($this->_article->created_by_alias))
+			{
+				$row->match_list[] = $this->_article->created_by_alias;
+			}
+		}
+		natcasesort($row->match_list);
+		return $row->match_list;
 	}
 
 	/**

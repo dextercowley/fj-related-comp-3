@@ -124,17 +124,12 @@ JHtml::_('behavior.framework');
 
 <?php if ($showCount) : ?>
 	<dd class="match_count">
-	<?php echo JText::sprintf('COM_FJRELATED_ARTICLE_MATCH_COUNT', $this->item->match_count)?>
+		<?php echo JText::sprintf('COM_FJRELATED_ARTICLE_MATCH_COUNT', $this->item->total_matches)?>
 	</dd>
 <?php endif; ?>
 <?php if ($showMatchList) : ?>
 	<dd class="match_list">
-	<?php $matchingTagNames = array(); ?>
-	<?php $tagArray = $this->item->match_list ? explode(',', $this->item->match_list) : array(); ?>
-	<?php foreach ($tagArray as $tagId) : ?>
-		<?php 	$matchingTagNames[] = $this->article->tagNames[$tagId];?>
-	<?php endforeach; ?>
-	<?php echo JText::sprintf('COM_FJRELATED_ARTICLE_MATCH_LIST', implode(', ', $matchingTagNames)); ?>
+		<?php echo JText::sprintf('COM_FJRELATED_ARTICLE_MATCH_LIST', implode(', ', $this->item->match_list)); ?>
 	</dd>
 <?php endif; ?>
  </dl>

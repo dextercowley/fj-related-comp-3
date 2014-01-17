@@ -79,7 +79,7 @@ $filter 	= JFactory::getApplication()->input->getString('filter-search', '');
 				</th>
 				<?php if ($this->params->get('showMatchCount')) : ?>
 					<th class="list-match-count" id="tableOrdering2">
-						<?php echo JHTML::_('grid.sort',  'COM_FJRELATED_NUM_MATCHES', 'match_count', $listDirn, $listOrder); ?>
+						<?php echo JHTML::_('grid.sort',  'COM_FJRELATED_NUM_MATCHES', 'total_matches', $listDirn, $listOrder); ?>
 					</th>
 				<?php endif; ?>
 				<?php if ($this->params->get('showMatchList', 0)) : ?>
@@ -137,20 +137,14 @@ $filter 	= JFactory::getApplication()->input->getString('filter-search', '');
 					</td>
 				<?php if ($this->params->get('showMatchCount')) : ?>
 					<td class="list-match-count">
-						<?php echo $article->match_count; ?>
+						<?php echo $article->total_matches; ?>
 					</td>
 				<?php endif; ?>
 
 				<?php if ($this->params->get('showMatchList', 0)) : ?>
 					<td class="list-match-list">
 					<?php if (isset($article->match_list)) : ?>
-						<?php $matchingTagNames = array(); ?>
-						<?php $tagArray = explode(',', $article->match_list); ?>
-						<?php foreach ($tagArray as $tagId) : ?>
-							<?php $matchingTagNames[] = $this->article->tagNames[$tagId];?>
-						<?php endforeach; ?>
-						<?php sort($matchingTagNames); ?>
-						<?php echo implode(', ', $matchingTagNames); ?>
+						<?php echo implode(', ', $article->match_list); ?>
 					<?php endif; ?>
 					</td>
 				<?php endif; ?>
