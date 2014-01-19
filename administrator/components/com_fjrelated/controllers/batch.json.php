@@ -2,7 +2,7 @@
 /**
  * @package     com_trackerstats
  *
- * @copyright   Copyright (C) 2013 Mark Dexter. All rights reserved.
+ * @copyright   Copyright (C) 2013 - 2014 Mark Dexter. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE
  */
 

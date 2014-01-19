@@ -2,7 +2,7 @@
 /**
  * @package		Site
  * @subpackage	com_fjrelated
- * @copyright	Copyright (C) 2009 - 2010 Mark Dexter. Portions Copyright(C) Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2009 - 2014 Mark Dexter. Portions Copyright(C) Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 

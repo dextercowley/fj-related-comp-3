@@ -3,7 +3,7 @@
  * @package     Joomla.Libraries
  * @subpackage  HTML
  *
- * @copyright   Copyright (C) 2005 - 2013 Mark Dexter. All rights reserved.
+ * @copyright   Copyright (C) 2008 - 2014 Mark Dexter. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE
  */
 
