@@ -8,7 +8,7 @@ $extensionName = 'fjrelated';
 $adminPath = dirname(__FILE__);
 $basePath = dirname(dirname(dirname(dirname(__FILE__))));
 $sitePath = $basePath . '/components/com_' . $extensionName . '/';
-$tempPath = $basePath . '/tmp/' . date('YmdHis');
+$tempPath = $basePath . '/tmp/' . date('Y-m-d-His');
 define('JPATH_BASE',$basePath);
 define('_JEXEC', 1);
 
