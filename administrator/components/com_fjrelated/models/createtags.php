@@ -50,7 +50,7 @@ class FJRelatedModelCreatetags extends JModelList
 			$rawArray = $this->getArticleCounts();
 			$data['totalArticles'] = $rawArray[0];
 			$data['totalKeywords'] = $rawArray[1];
-			$data['batchSize'] = JComponentHelper::getParams('com_fjrelated')->get('batch_size', 100);
+			$data['batchSize'] = JComponentHelper::getParams('com_fjrelated')->get('batch_size', 50);
 		}
 		$data['startingTagCount'] = isset($data['startingTagCount']) ? $data['startingTagCount'] : $this->getTagTotal();
 		$data['startingTagMapCount'] = isset($data['startingTagMapCount']) ? $data['startingTagMapCount'] : $this->getTagMapTotal();
@@ -112,7 +112,7 @@ class FJRelatedModelCreatetags extends JModelList
 		$result['totalArticles'] = $articleCounts[0];
 		$result['totalTags'] = $tagTotal;
 		$result['totalMapRows'] = $tagMapTotal;
-		$result['batchSize'] = JComponentHelper::getParams('com_fjrelated')->get('batch_size', 100);
+		$result['batchSize'] = JComponentHelper::getParams('com_fjrelated')->get('batch_size', 50);
 		return $result;
 	}
 
