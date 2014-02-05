@@ -11,7 +11,7 @@
 		<downloads>
 			<!-- Careful: No spaces or new lines are allowed in the downloadurl. -->
 			<!-- Placeholder URL until we actually have the 4.0.1 file. -->
-			<downloadurl type="full" format="zip">http://joomlacode.org/gf/download/frsrelease/18992/133964/com_fjrelated_3.0.1.zip</downloadurl>
+			<downloadurl type="full" format="zip">http://joomlacode.org/gf/download/frsrelease/xxx/yyy/com_fjrelated_4.0.1.zip</downloadurl>
 		</downloads>
 		<maintainer>Mark Dexter</maintainer>
 		<maintainerurl>http://joomlacode.org/gf/project/freejoomla/</maintainerurl>
