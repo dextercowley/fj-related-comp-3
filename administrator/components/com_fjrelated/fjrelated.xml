@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension method="upgrade" type="component" version="3.0.0">
 	<name>com_fjrelated</name>
-	<creationDate>January 2014</creationDate>
+	<creationDate>February 2014</creationDate>
 	<author>Mark Dexter</author>
 	<authorEmail>dextercowley@gmail.com</authorEmail>
 	<authorUrl>www.joomla.org</authorUrl>
 	<copyright>(C) 2008 - 2014 Mark Dexter. Portions Copyright(C) Open Source Matters. All rights reserved.</copyright>
 	<license>http://www.gnu.org/licenses/gpl.html</license>
-	<version>4.0.0</version>
+	<version>4.0.1</version>
 	<description>COM_FJRELATED_LAYOUT_DESC</description>
 	<installfile/>
 	<uninstallfile/>
