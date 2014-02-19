@@ -15,7 +15,7 @@
 		</downloads>
 		<maintainer>Mark Dexter</maintainer>
 		<maintainerurl>http://joomlacode.org/gf/project/freejoomla/</maintainerurl>
-		<!-- These are the versions of the component that this update works in. -->
-		<targetplatform name="joomla" version="4.[012345]" />
+		<!-- These are the versions of Joomla that this update works in. -->
+		<targetplatform name="joomla" version="3.[012345]" />
 	</update>
 </updates>
