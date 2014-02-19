@@ -492,7 +492,7 @@ class FJRelatedModelFJRelated extends JModelList
 			}
 
 			// Plug in the WHERE clause of $selectQuery inside ()
-			$query->where('(' . substr((string) $selectQuery->where, 8) . ')');
+			$query->where('(' . trim(str_ireplace('WHERE', '', (string) $selectQuery->where)) . ')');
 
 			// get published state select
 			if (is_array($publishedState)) {
