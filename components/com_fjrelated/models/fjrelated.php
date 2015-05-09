@@ -532,14 +532,11 @@ class FJRelatedModelFJRelated extends JModelList
 			}
 
 			$query->select($totalMatches . ' AS total_matches');
-			$query->select('a.id, a.title, a.alias, a.introtext, a.fulltext, DATE_FORMAT(a.created, "%Y-%m-%d") AS created, a.state, a.catid, a.hits')
-				->select('a.created, a.created_by, a.created_by_alias, a.modified, a.modified_by')
-				->select('a.checked_out, a.checked_out_time, a.publish_up, a.publish_down, a.attribs, a.hits, a.images, a.urls, a.ordering, a.metakey, a.metadesc, a.access')
+			$query->select('a.*, DATE_FORMAT(a.created, "%Y-%m-%d") AS created')
 				->select('cc.access AS cat_access, cc.published AS cat_state')
 				->select('CASE WHEN CHAR_LENGTH(a.alias) THEN CONCAT_WS(":", a.id, a.alias) ELSE a.id END as slug')
 				->select('CASE WHEN CHAR_LENGTH(cc.alias) THEN CONCAT_WS(":", cc.id, cc.alias) ELSE cc.id END as catslug')
 				->select('CHAR_LENGTH( a.`fulltext` ) AS readmore, u.name AS author')
-				->select('a.metakey')
 				->select('cc.title as category, "article" as link_type, cc.alias as category_alias, parent.id as parent_id, parent.alias as parent_alias');
 
 			$query->from('#__content AS a');
