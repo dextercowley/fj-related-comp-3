@@ -26,6 +26,7 @@
 		<folder>language</folder>
 	</files>
 	<administration>
+		<menu img="class:weblinks">com_fjrelated</menu>
 		<files folder="admin">
 		  	<filename>config.xml</filename>
    			<filename>controller.php</filename>
