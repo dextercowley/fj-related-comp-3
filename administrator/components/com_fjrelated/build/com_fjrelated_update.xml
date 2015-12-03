@@ -11,7 +11,7 @@
 		<downloads>
 			<!-- Careful: No spaces or new lines are allowed in the downloadurl. -->
 			<!-- Placeholder URL until we actually have the 4.0.1 file. -->
-			<downloadurl type="full" format="zip">https://bitbucket.org/dextercowley/fj-stuff/downloads/com_fjrelated_4.0.2.zip</downloadurl>
+			<downloadurl type="full" format="zip">http://downloads.sourceforge.net/project/fjsoftware/FJ_Related_Comp_4x/com_fjrelated_4.0.2.zip?r=&ts=1449184721&use_mirror=master</downloadurl>
 		</downloads>
 		<maintainer>Mark Dexter</maintainer>
 		<maintainerurl>https://sourceforge.net/projects/fjsoftware</maintainerurl>
