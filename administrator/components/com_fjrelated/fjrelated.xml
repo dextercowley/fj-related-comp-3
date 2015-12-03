@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension method="upgrade" type="component" version="3.4.0">
 	<name>com_fjrelated</name>
-	<creationDate>May 2015</creationDate>
+	<creationDate>December 2015</creationDate>
 	<author>Mark Dexter</author>
 	<authorEmail>dextercowley@gmail.com</authorEmail>
 	<authorUrl>www.joomla.org</authorUrl>
@@ -26,7 +26,7 @@
 		<folder>language</folder>
 	</files>
 	<administration>
-		<menu img="class:weblinks">com_fjrelated</menu>
+		<menu img="class:weblinks" view="fjrelated">com_fjrelated</menu>
 		<files folder="admin">
 		  	<filename>config.xml</filename>
    			<filename>controller.php</filename>
